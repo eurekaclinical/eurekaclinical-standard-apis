@@ -36,9 +36,6 @@ public final class ServletModuleSupport {
     private static final Logger LOGGER = LoggerFactory
             .getLogger(ServletModuleSupport.class);
     private static final String CAS_CALLBACK_PATH = "/proxyCallback";
-    private static final String ROLES_SQL = "select a.name as role from roles a, user_role b, users c where a.id=b.role_id and b.user_id=c.id and c.username=?";
-    private static final String ROLE_COLUMN = "role";
-    private static final String SERVICES_JNDI_NAME = "java:comp/env/jdbc/EurekaService";
     private final EurekaClinicalProperties properties;
     private final String contextPath;
 
@@ -46,17 +43,6 @@ public final class ServletModuleSupport {
             EurekaClinicalProperties inProperties) {
         this.properties = inProperties;
         this.contextPath = contextPath;
-    }
-
-    public Map<String, String> getRolesFilterInitParams() {
-        Map<String, String> rolesFilterInitParams = new HashMap<>();
-        rolesFilterInitParams.put("datasource", SERVICES_JNDI_NAME);
-        rolesFilterInitParams.put("sql", ROLES_SQL);
-        rolesFilterInitParams.put("rolecolumn", ROLE_COLUMN);
-        if (LOGGER.isDebugEnabled()) {
-            printParams(rolesFilterInitParams);
-        }
-        return rolesFilterInitParams;
     }
 
     public Map<String, String> getCasProxyFilterInitParamsForWebApp() {
