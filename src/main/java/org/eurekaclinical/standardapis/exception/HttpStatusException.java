@@ -30,27 +30,27 @@ import javax.ws.rs.core.Response.Status;
  */
 public class HttpStatusException extends WebApplicationException {
 
-    private Status status;
+    private final Status status;
 
     public HttpStatusException(Status status) {
-        super(Response.status(status).entity(status.getReasonPhrase()).type("text/plain").build());
+        super(Response.status(status).build());
         this.status = status;
     }
 
     public HttpStatusException(Status status, String message) {
-        super(Response.status(status).entity(message).type("text/plain").build());
+        super(message != null ? Response.status(status).entity(message).type("text/plain").build() : Response.status(status).build());
         this.status = status;
     }
 
     public HttpStatusException(Status status, Throwable cause) {
         super(cause,
-                Response.status(status).entity(cause != null ? cause.getMessage() : status.getReasonPhrase()).type("text/plain").build());
+                cause != null ? Response.status(status).entity(cause.getMessage()).type("text/plain").build() : Response.status(status).build());
         this.status = status;
     }
 
     public HttpStatusException(Status status, String message, Throwable cause) {
         super(cause,
-                Response.status(status).entity(message).type("text/plain").build());
+                message != null ? Response.status(status).entity(message).type("text/plain").build() : (cause != null ? Response.status(status).entity(cause.getMessage()).type("text/plain").build() : Response.status(status).build()));
         this.status = status;
     }
 
