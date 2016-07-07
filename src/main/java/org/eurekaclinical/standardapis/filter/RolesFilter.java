@@ -19,7 +19,6 @@ package org.eurekaclinical.standardapis.filter;
  * limitations under the License.
  * #L%
  */
-
 import java.io.IOException;
 import java.security.Principal;
 import java.util.HashSet;
@@ -51,14 +50,14 @@ public class RolesFilter implements Filter {
      * The class level logger.
      */
     private static final Logger LOGGER = LoggerFactory.getLogger(RolesFilter.class);
-    
+
     private final UserDao<? extends UserEntity<? extends RoleEntity>> userDao;
 
     @Inject
     public RolesFilter(UserDao<? extends UserEntity<? extends RoleEntity>> inUserDao) {
         this.userDao = inUserDao;
     }
-    
+
     @Override
     public void init(FilterConfig fc) throws ServletException {
     }
@@ -70,10 +69,12 @@ public class RolesFilter implements Filter {
         Principal principal = servletRequest.getUserPrincipal();
         if (principal != null) {
             UserEntity<? extends RoleEntity> user = this.userDao.getByPrincipal(principal);
-            List<? extends RoleEntity> roleEntities = user.getRoles();
             Set<String> roles = new HashSet<>();
-            for (RoleEntity roleEntity : roleEntities) {
-                roles.add(roleEntity.getName());
+            if (user != null) {
+                List<? extends RoleEntity> roleEntities = user.getRoles();
+                for (RoleEntity roleEntity : roleEntities) {
+                    roles.add(roleEntity.getName());
+                }
             }
             HttpServletRequest wrappedRequest = new RolesRequestWrapper(
                     servletRequest, principal, roles);
@@ -82,7 +83,7 @@ public class RolesFilter implements Filter {
             inChain.doFilter(inRequest, inResponse);
         }
     }
-    
+
     @Override
     public void destroy() {
     }
