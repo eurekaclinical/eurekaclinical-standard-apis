@@ -19,7 +19,6 @@ package org.eurekaclinical.standardapis.props;
  * limitations under the License.
  * #L%
  */
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -74,8 +73,8 @@ public abstract class EurekaClinicalProperties {
      * <code>eureka.config.dir</code> system property allows specifying an
      * alternative configuration directory.
      *
-     * @param defaultConfigDir the default location of configuration file, 
-     * based on the operating system. Cannot be <code>null</code>.
+     * @param defaultConfigDir the default location of configuration file, based
+     * on the operating system. Cannot be <code>null</code>.
      */
     protected EurekaClinicalProperties(String defaultConfigDir) {
         if (defaultConfigDir == null) {
