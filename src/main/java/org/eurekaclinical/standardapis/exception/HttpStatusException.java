@@ -19,8 +19,8 @@ package org.eurekaclinical.standardapis.exception;
  * limitations under the License.
  * #L%
  */
-
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -30,32 +30,53 @@ import javax.ws.rs.core.Response.Status;
  */
 public class HttpStatusException extends WebApplicationException {
 
-    private final Status status;
+    private static final long serialVersionUID = 1L;
 
+    private final Status status;
+    
     public HttpStatusException(Status status) {
-        super(Response.status(status).build());
+        super(buildResponse(status));
         this.status = status;
     }
 
     public HttpStatusException(Status status, String message) {
-        super(message != null ? Response.status(status).entity(message).type("text/plain").build() : Response.status(status).build());
+        super(buildResponse(status, message));
         this.status = status;
     }
 
     public HttpStatusException(Status status, Throwable cause) {
-        super(cause,
-                cause != null ? Response.status(status).entity(cause.getMessage()).type("text/plain").build() : Response.status(status).build());
+        super(cause, buildResponse(status, cause));
         this.status = status;
     }
 
     public HttpStatusException(Status status, String message, Throwable cause) {
         super(cause,
-                message != null ? Response.status(status).entity(message).type("text/plain").build() : (cause != null ? Response.status(status).entity(cause.getMessage()).type("text/plain").build() : Response.status(status).build()));
+                message != null ? buildResponse(status, message) : buildResponse(status, cause));
         this.status = status;
     }
 
     public Status getStatus() {
         return this.status;
+    }
+    
+    private static Response buildResponse(Status status, Throwable cause) {
+        if (cause != null) {
+            return Response.status(status).entity(cause.getMessage()).type(MediaType.TEXT_PLAIN).build();
+        } else {
+            return buildResponse(status);
+        }
+    }
+
+    private static Response buildResponse(Status status, String message) {
+        if (message != null) {
+            return Response.status(status).entity(message).type(MediaType.TEXT_PLAIN).build();
+        } else {
+            return buildResponse(status);
+        }
+    }
+
+    private static Response buildResponse(Status status) {
+        return Response.status(status).entity(status.getReasonPhrase()).type(MediaType.TEXT_PLAIN).build();
     }
 
 }

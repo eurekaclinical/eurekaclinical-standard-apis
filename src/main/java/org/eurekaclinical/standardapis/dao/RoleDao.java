@@ -19,25 +19,23 @@ package org.eurekaclinical.standardapis.dao;
  * limitations under the License.
  * #L%
  */
-
-import java.security.Principal;
-import javax.servlet.http.HttpServletRequest;
 import org.eurekaclinical.standardapis.entity.RoleEntity;
-import org.eurekaclinical.standardapis.entity.UserEntity;
 
 /**
- * A data access object interface for working with {@link UserEntity} objects
- * in a data store.
+ * A data access object interface for working with {@link RoleEntity} objects in
+ * a data store.
  *
  * @author Andrew Post
  * @param <U> a user type.
  *
  */
-public interface UserDao<U extends UserEntity<? extends RoleEntity>> extends Dao<U, Long> {
+public interface RoleDao<U extends RoleEntity> extends Dao<U, Long> {
 
-    U getByHttpServletRequest(HttpServletRequest request);
-    
-    U getByPrincipal(Principal principal);
-
-    U getByUsername(String username);
+    /**
+     * Get a role, given the name of that role.
+     *
+     * @param name The name of the role to search for.
+     * @return A {@link RoleEntity} object with a name matching the given name.
+     */
+    U getRoleByName(String name);
 }

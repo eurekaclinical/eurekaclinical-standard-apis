@@ -146,6 +146,15 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
             return null;
         }
     }
+    
+    protected <Y> T getUniqueByAttribute(String attributeName, Y value) {
+        try {
+            return new DatabaseSupport(getEntityManager())
+                    .getUniqueByAttribute(this.entityClass, attributeName, value);
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
 
     protected <Y> List<T> getListByAttribute(SingularAttribute<T, Y> attribute, Y value) {
         return new DatabaseSupport(getEntityManager())

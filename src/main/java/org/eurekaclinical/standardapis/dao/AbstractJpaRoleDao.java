@@ -22,11 +22,9 @@ package org.eurekaclinical.standardapis.dao;
 
 import javax.persistence.EntityManager;
 
-import java.security.Principal;
 import javax.inject.Provider;
 
-import javax.servlet.http.HttpServletRequest;
-import org.eurekaclinical.standardapis.entity.UserEntity;
+import org.eurekaclinical.standardapis.entity.RoleEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,13 +35,12 @@ import org.slf4j.LoggerFactory;
  * @author Andrew Post
  * @param <U> the user entity class.
  */
-public abstract class JpaUserDao<U extends UserEntity> extends GenericDao<U, Long> implements UserDao<U> {
+public abstract class AbstractJpaRoleDao<U extends RoleEntity> extends GenericDao<U, Long> implements RoleDao<U> {
 
     /**
      * The class level logger.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(
-            JpaUserDao.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractJpaRoleDao.class);
 
     /**
      * Create an object with the give entity manager.
@@ -52,21 +49,13 @@ public abstract class JpaUserDao<U extends UserEntity> extends GenericDao<U, Lon
      * @param inEMProvider The entity manager to be used for communication with
      * the data store.
      */
-    public JpaUserDao(Class<U> cls, final Provider<EntityManager> inEMProvider) {
+    public AbstractJpaRoleDao(Class<U> cls, final Provider<EntityManager> inEMProvider) {
         super(cls, inEMProvider);
     }
 
     @Override
-    public U getByHttpServletRequest(HttpServletRequest request) {
-        return getByPrincipal(request.getUserPrincipal());
+    public U getRoleByName(String name) {
+        return getUniqueByAttribute("name", name);
     }
-
-    @Override
-    public U getByPrincipal(Principal principal) {
-        return getByUsername(principal.getName());
-    }
-
-    @Override
-    public abstract U getByUsername(String username);
-
+    
 }

@@ -72,6 +72,20 @@ public final class DatabaseSupport {
         }
         return result;
     }
+    
+    public <T, Y> T getUniqueByAttribute(Class<T> entityCls,
+            String attributeName, Y value) {
+        TypedQuery<T> query = createTypedQuery(entityCls, attributeName, value);
+        T result = null;
+        try {
+            result = query.getSingleResult();
+        } catch (NonUniqueResultException nure) {
+            LOGGER.warn("Result not unique for {} = {}", attributeName, value);
+        } catch (NoResultException nre) {
+            LOGGER.debug("Result not existant for {} = {}", attributeName, value);
+        }
+        return result;
+    }
 
     public <T, Y> List<T> getListByAttribute(
             Class<T> entityCls, SingularAttribute<T, Y> attribute, Y value) {
@@ -94,6 +108,25 @@ public final class DatabaseSupport {
         CriteriaQuery<T> criteriaQuery = builder.createQuery(entityCls);
         Root<T> root = criteriaQuery.from(entityCls);
         Path<Y> path = root.get(attribute);
+        return entityManager.createQuery(criteriaQuery.where(
+                builder.equal(path, value)));
+    }
+    
+    /**
+     * Creates a typed query based on the attribute given and the target value
+     * for that attribute.
+     *
+     * @param attribute The attribute to compare.
+     * @param value The target value for the given attribute.
+     * @param <Y> The type of the target attribute and target value.
+     * @return A typed query that contains the given criteria.
+     */
+    private <T, Y> TypedQuery<T> createTypedQuery(Class<T> entityCls,
+            String attributeName, Y value) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = builder.createQuery(entityCls);
+        Root<T> root = criteriaQuery.from(entityCls);
+        Path<Y> path = root.get(attributeName);
         return entityManager.createQuery(criteriaQuery.where(
                 builder.equal(path, value)));
     }
