@@ -81,7 +81,9 @@ public abstract class EurekaClinicalProperties {
         }
         this.properties = new Properties();
         try (InputStream inputStream = getClass().getResourceAsStream(FALLBACK_CONFIG_FILE)) {
-            this.properties.load(inputStream);
+            if (inputStream != null) {
+                this.properties.load(inputStream);
+            }
         } catch (IOException ioe) {
             throw new AssertionError("Fallback configuration is unavailable: " + ioe.getMessage());
         }

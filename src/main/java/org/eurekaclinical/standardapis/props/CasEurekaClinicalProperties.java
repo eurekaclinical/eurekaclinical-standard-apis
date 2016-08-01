@@ -56,18 +56,18 @@ public abstract class CasEurekaClinicalProperties extends EurekaClinicalProperti
     public abstract String getProxyCallbackServer();
 
     public String getCasUrl() {
-        return this.getValue("cas.url");
+        return this.getValue("cas.url", "https://localhost/cas-server");
     }
 
     public String getCasLoginUrl() {
         UriBuilder builder = UriBuilder.fromUri(getCasUrl());
-        builder.path(this.getValue("cas.url.login"));
+        builder.path(this.getValue("cas.url.login", "/login"));
         return builder.build().toString();
     }
 
     public String getCasLogoutUrl() {
         UriBuilder builder = UriBuilder.fromUri(getCasUrl());
-        builder.path(this.getValue("cas.url.logout"));
+        builder.path(this.getValue("cas.url.logout", "/logout"));
         return builder.build().toString();
     }
 }
