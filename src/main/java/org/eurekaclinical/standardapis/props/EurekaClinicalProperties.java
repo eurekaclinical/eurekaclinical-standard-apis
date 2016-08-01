@@ -26,7 +26,6 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import javax.ws.rs.core.UriBuilder;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -116,24 +115,6 @@ public abstract class EurekaClinicalProperties {
 
     public String getConfigDir() {
         return configDir;
-    }
-
-    public abstract String getProxyCallbackServer();
-
-    public String getCasUrl() {
-        return this.getValue("cas.url");
-    }
-
-    public String getCasLoginUrl() {
-        UriBuilder builder = UriBuilder.fromUri(getCasUrl());
-        builder.path(this.getValue("cas.url.login"));
-        return builder.build().toString();
-    }
-
-    public String getCasLogoutUrl() {
-        UriBuilder builder = UriBuilder.fromUri(getCasUrl());
-        builder.path(this.getValue("cas.url.logout"));
-        return builder.build().toString();
     }
 
     public String getStage() {
