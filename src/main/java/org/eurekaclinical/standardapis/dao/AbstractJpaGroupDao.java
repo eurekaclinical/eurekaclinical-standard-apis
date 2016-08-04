@@ -23,10 +23,7 @@ package org.eurekaclinical.standardapis.dao;
 import javax.persistence.EntityManager;
 
 import javax.inject.Provider;
-
-import org.eurekaclinical.standardapis.entity.RoleEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.eurekaclinical.standardapis.entity.GroupEntity;
 
 /**
  * An implementation of the {@link UserDao} interface, backed by JPA entities
@@ -35,12 +32,7 @@ import org.slf4j.LoggerFactory;
  * @author Andrew Post
  * @param <U> the user entity class.
  */
-public abstract class AbstractJpaRoleDao<U extends RoleEntity> extends GenericDao<U, Long> implements RoleDao<U> {
-
-    /**
-     * The class level logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractJpaRoleDao.class);
+public abstract class AbstractJpaGroupDao<U extends GroupEntity> extends GenericDao<U, Long> implements GroupDao<U> {
 
     /**
      * Create an object with the give entity manager.
@@ -49,7 +41,7 @@ public abstract class AbstractJpaRoleDao<U extends RoleEntity> extends GenericDa
      * @param inEMProvider The entity manager to be used for communication with
      * the data store.
      */
-    public AbstractJpaRoleDao(Class<U> cls, final Provider<EntityManager> inEMProvider) {
+    public AbstractJpaGroupDao(Class<U> cls, final Provider<EntityManager> inEMProvider) {
         super(cls, inEMProvider);
     }
 

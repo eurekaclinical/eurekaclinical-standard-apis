@@ -19,16 +19,17 @@ package org.eurekaclinical.standardapis.dao;
  * limitations under the License.
  * #L%
  */
-import org.eurekaclinical.standardapis.entity.RoleEntity;
+
 
 /**
- * A data access object interface for working with {@link RoleEntity} objects in
- * a data store.
+ * Provides an interface for the common CRUD operations for an entity.
  *
- * @author Andrew Post
- * @param <E> a role entity type.
- *
+ * @param <T> The type of the entity.
+ * @param <PK> The type of the primary key of the entity.
+ * @author hrathod
  */
-public interface RoleDao<E extends RoleEntity> extends DaoWithUniqueName<E, Long> {
+public interface DaoWithUniqueName<T, PK> extends Dao<T, PK> {
 
+    T getByName(String name);
+    
 }

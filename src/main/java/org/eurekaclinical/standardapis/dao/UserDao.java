@@ -33,11 +33,10 @@ import org.eurekaclinical.standardapis.entity.UserEntity;
  * @param <U> a user type.
  *
  */
-public interface UserDao<U extends UserEntity<? extends RoleEntity>> extends Dao<U, Long> {
+public interface UserDao<U extends UserEntity<? extends RoleEntity>> extends DaoWithUniqueName<U, Long> {
 
     U getByHttpServletRequest(HttpServletRequest request);
     
     U getByPrincipal(Principal principal);
 
-    U getByUsername(String username);
 }

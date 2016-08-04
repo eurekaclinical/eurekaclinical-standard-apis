@@ -62,11 +62,11 @@ public abstract class AbstractJpaUserDao<U extends UserEntity<?>> extends Generi
 
     @Override
     public U getByPrincipal(Principal principal) {
-        return getByUsername(principal.getName());
+        return getByName(principal.getName());
     }
 
     @Override
-    public U getByUsername(String username) {
+    public U getByName(String username) {
         return getUniqueByAttribute("username", username);
     }
 

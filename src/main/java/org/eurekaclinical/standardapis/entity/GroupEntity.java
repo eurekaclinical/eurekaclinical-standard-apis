@@ -24,7 +24,7 @@ package org.eurekaclinical.standardapis.entity;
  *
  * @author arpost
  */
-public interface RoleEntity extends Entity {
+public interface GroupEntity extends Entity {
 
     /**
      * Get the role's identification number.
@@ -40,21 +40,6 @@ public interface RoleEntity extends Entity {
      * @return A String containing the role's name.
      */
     String getName();
-
-    /**
-     * Is this role a default role?
-     *
-     * @return True if the role is a default role, false otherwise.
-     */
-    boolean isDefaultRole();
-
-    /**
-     * Set the role's default flag.
-     *
-     * @param inDefaultRole True or False, True indicating a default role, False
-     * indicating a non-default role.
-     */
-    void setDefaultRole(boolean inDefaultRole);
 
     /**
      * Set the role's identification number.

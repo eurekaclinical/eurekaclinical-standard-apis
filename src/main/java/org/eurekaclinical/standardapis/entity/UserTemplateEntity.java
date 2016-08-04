@@ -25,10 +25,8 @@ import java.util.List;
 /**
  *
  * @author Andrew Post
- * @param <R> a role type.
  */
-public interface UserEntity<R extends RoleEntity> extends Entity {
-
+public interface UserTemplateEntity<R extends RoleEntity> extends Entity {
     /**
      * Get the user's unique identifier.
      *
@@ -43,13 +41,6 @@ public interface UserEntity<R extends RoleEntity> extends Entity {
      * @return A list of roles assigned to the user.
      */
     List<R> getRoles();
-
-    /**
-     * Get the user's unique username.
-     *
-     * @return the username.
-     */
-    String getUsername();
 
     /**
      * Set the user's unique identifier.
@@ -69,12 +60,19 @@ public interface UserEntity<R extends RoleEntity> extends Entity {
     void addRole(R role);
     
     void removeRole(R role);
-
+    
     /**
-     * Set the user's unique username.
-     *
-     * @param inUsername the usernames.
+     * Sets the name of the template.
+     * 
+     * @param name the template's name.
      */
-    void setUsername(final String inUsername);
+    void setName(String name);
+    
+    /**
+     * Gets the name of the template.
+     * 
+     * @return the template's name. 
+     */
+    String getName();
     
 }

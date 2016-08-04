@@ -22,9 +22,11 @@ package org.eurekaclinical.standardapis.dao;
 
 import javax.persistence.EntityManager;
 
+import java.security.Principal;
 import javax.inject.Provider;
 
-import org.eurekaclinical.standardapis.entity.RoleEntity;
+import javax.servlet.http.HttpServletRequest;
+import org.eurekaclinical.standardapis.entity.UserTemplateEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,12 +37,7 @@ import org.slf4j.LoggerFactory;
  * @author Andrew Post
  * @param <U> the user entity class.
  */
-public abstract class AbstractJpaRoleDao<U extends RoleEntity> extends GenericDao<U, Long> implements RoleDao<U> {
-
-    /**
-     * The class level logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractJpaRoleDao.class);
+public abstract class AbstractJpaUserTemplateDao<U extends UserTemplateEntity<?>> extends GenericDao<U, Long> implements UserTemplateDao<U> {
 
     /**
      * Create an object with the give entity manager.
@@ -49,7 +46,7 @@ public abstract class AbstractJpaRoleDao<U extends RoleEntity> extends GenericDa
      * @param inEMProvider The entity manager to be used for communication with
      * the data store.
      */
-    public AbstractJpaRoleDao(Class<U> cls, final Provider<EntityManager> inEMProvider) {
+    public AbstractJpaUserTemplateDao(Class<U> cls, final Provider<EntityManager> inEMProvider) {
         super(cls, inEMProvider);
     }
 
@@ -57,5 +54,5 @@ public abstract class AbstractJpaRoleDao<U extends RoleEntity> extends GenericDa
     public U getByName(String name) {
         return getUniqueByAttribute("name", name);
     }
-    
+
 }
