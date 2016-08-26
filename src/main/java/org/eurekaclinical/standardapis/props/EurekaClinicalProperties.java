@@ -123,8 +123,17 @@ public abstract class EurekaClinicalProperties {
         return this.getValue("eurekaclinical.stage", "DEVELOPMENT");
     }
     
+    /**
+     * A URL representing the domain in which Eureka Clinical is installed.
+     * 
+     * @return a URL string.
+     */
+    public String getDomainUrl() {
+        return getValue("eurekaclinical.domain.url", "https://localhost");
+    }
+    
     public abstract String getUrl();
-
+    
     /**
      * Returns the String value of the given property name.
      *

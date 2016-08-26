@@ -70,4 +70,5 @@ public abstract class CasEurekaClinicalProperties extends EurekaClinicalProperti
         builder.path(this.getValue("cas.url.logout", "/logout"));
         return builder.build().toString();
     }
+    
 }
