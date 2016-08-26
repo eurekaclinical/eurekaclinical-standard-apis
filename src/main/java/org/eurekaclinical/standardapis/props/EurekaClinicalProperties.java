@@ -122,6 +122,8 @@ public abstract class EurekaClinicalProperties {
     public String getStage() {
         return this.getValue("eurekaclinical.stage", "DEVELOPMENT");
     }
+    
+    public abstract String getUrl();
 
     /**
      * Returns the String value of the given property name.
