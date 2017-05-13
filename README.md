@@ -3,7 +3,11 @@ Standard APIs and related functionality that all Eureka! Clinical projects use
 
 # Version history
 ## Version 1.0
-The initial release provides standards-based implementations for creating JPA entities for managing users, roles and authorization templates; creating data access objects; accessing role information for authorization; reading application configuration; and throwing meaningful exceptions when REST API responses have an error status code.
+The initial release provides standards-based implementations for creating JPA entities for managing users, roles and authorization templates; creating data access objects; accessing role information for authorization; reading application configuration; and throwing meaningful exceptions when REST API responses have an error status code. It uses the standard versions specified by the [Eureka! Clinical Standard Dependencies parent pom](https://github.com/eurekaclinical/eurekaclinical-parent-standard-deps), which are:
+* JPA 2.1 (Java Persistence)
+* Servlet API 3.0.1
+* JAX-RS 2.0.1 (Java API for RESTful Web Services)
+* JSR-330 (standard @Inject and @Provider annotations)
 
 # What does it do?
 The [Eureka! Clinical Common Web Application Framework](https://github.com/eurekaclinical/eurekaclinical-common)
