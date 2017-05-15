@@ -1,6 +1,9 @@
 # Eureka! Clinical Web Application Standard APIs
 Standard APIs and related functionality that all Eureka! Clinical projects use
 
+### Latest development release
+The latest development release is 2.0-Alpha-1.
+
 # Version history
 ## Version 1.0
 The initial release provides standards-based implementations for creating JPA entities for managing users, roles and authorization templates; creating data access objects; accessing role information for authorization; reading application configuration; and throwing meaningful exceptions when REST API responses have an error status code. It uses the standard versions specified by the [Eureka! Clinical Standard Dependencies parent pom](https://github.com/eurekaclinical/eurekaclinical-parent-standard-deps), which are:
@@ -22,6 +25,25 @@ web applications that use those standards, including:
 
 ## Building it
 The project uses the maven build tool. Typically, you build it by invoking `mvn clean install` at the command line. For simple file changes, not additions or deletions, you can usually use `mvn install`. See https://github.com/eurekaclinical/dev-wiki/wiki/Building-Eureka!-Clinical-projects for more details.
+
+## Maven dependency
+### Latest development release
+```
+<dependency>
+    <groupId>org.eurekaclinical</groupId>
+    <artifactId>eurekaclinical-common</artifactId>
+    <version>2.0-Alpha-1</version>
+</dependency>
+```
+
+### Latest final release
+```
+<dependency>
+    <groupId>org.eurekaclinical</groupId>
+    <artifactId>eurekaclinical-common</artifactId>
+    <version>1.0</version>
+</dependency>
+```
 
 ## Development documentation
 * [Javadoc for latest development release](http://javadoc.io/doc/org.eurekaclinical/eurekaclinical-standard-apis) [![Javadocs](http://javadoc.io/badge/org.eurekaclinical/eurekaclinical-standard-apis.svg)](http://javadoc.io/doc/org.eurekaclinical/eurekaclinical-standard-apis)
