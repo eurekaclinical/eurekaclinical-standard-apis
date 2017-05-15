@@ -33,7 +33,7 @@ The project uses the maven build tool. Typically, you build it by invoking `mvn 
 <dependency>
     <groupId>org.eurekaclinical</groupId>
     <artifactId>eurekaclinical-standard-apis</artifactId>
-    <version>2.0-Alpha-1</version>
+    <version>version</version>
 </dependency>
 ```
 
