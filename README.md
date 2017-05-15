@@ -37,7 +37,7 @@ The project uses the maven build tool. Typically, you build it by invoking `mvn 
 </dependency>
 ```
 
-## Development documentation
+## Developer documentation
 * [Javadoc for latest development release](http://javadoc.io/doc/org.eurekaclinical/eurekaclinical-standard-apis) [![Javadocs](http://javadoc.io/badge/org.eurekaclinical/eurekaclinical-standard-apis.svg)](http://javadoc.io/doc/org.eurekaclinical/eurekaclinical-standard-apis)
 * [Javadoc for version 1.0](http://javadoc.io/doc/org.eurekaclinical/eurekaclinical-standard-apis/1.0)
 
