@@ -1,8 +1,10 @@
 # Eureka! Clinical Web Application Standard APIs
 Standard APIs and related functionality that all Eureka! Clinical projects use
 
-### Latest development release
-The latest development release is 2.0-Alpha-1.
+# Version 2.0 development series
+Latest release: [![Latest release](https://maven-badges.herokuapp.com/maven-central/org.eurekaclinical/eurekaclinical-standard-apis/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.eurekaclinical/eurekaclinical-standard-apis)
+
+The goal of the 2.0 series is to have sufficient functionality for all Eureka! Clinical web applications to depend on eurekaclinical-standard-apis.
 
 # Version history
 ## Version 1.0
