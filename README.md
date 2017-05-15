@@ -23,5 +23,9 @@ web applications that use those standards, including:
 ## Building it
 The project uses the maven build tool. Typically, you build it by invoking `mvn clean install` at the command line. For simple file changes, not additions or deletions, you can usually use `mvn install`. See https://github.com/eurekaclinical/dev-wiki/wiki/Building-Eureka!-Clinical-projects for more details.
 
-## Releasing it
-First, ensure that there is no uncommitted code in your repo. Release it by invoking `mvn release:prepare` followed by `mvn release:perform`. See https://github.com/eurekaclinical/dev-wiki/wiki/Project-release-process for more details.
+## Development documentation
+* [Javadoc for latest development release](http://javadoc.io/doc/org.eurekaclinical/eurekaclinical-standard-apis) [![Javadocs](http://javadoc.io/badge/org.eurekaclinical/eurekaclinical-standard-apis.svg)](http://javadoc.io/doc/org.eurekaclinical/eurekaclinical-standard-apis)
+* [Javadoc for version 1.0](http://javadoc.io/doc/org.eurekaclinical/eurekaclinical-standard-apis/1.0)
+
+## Getting help
+Feel free to contact us at help@eurekaclinical.org.
