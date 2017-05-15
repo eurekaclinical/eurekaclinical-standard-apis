@@ -29,21 +29,11 @@ web applications that use those standards, including:
 The project uses the maven build tool. Typically, you build it by invoking `mvn clean install` at the command line. For simple file changes, not additions or deletions, you can usually use `mvn install`. See https://github.com/eurekaclinical/dev-wiki/wiki/Building-Eureka!-Clinical-projects for more details.
 
 ## Maven dependency
-### Latest development release
 ```
 <dependency>
     <groupId>org.eurekaclinical</groupId>
-    <artifactId>eurekaclinical-common</artifactId>
+    <artifactId>eurekaclinical-standard-apis</artifactId>
     <version>2.0-Alpha-1</version>
-</dependency>
-```
-
-### Latest final release
-```
-<dependency>
-    <groupId>org.eurekaclinical</groupId>
-    <artifactId>eurekaclinical-common</artifactId>
-    <version>1.0</version>
 </dependency>
 ```
 
