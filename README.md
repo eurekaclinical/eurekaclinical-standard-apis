@@ -1,6 +1,17 @@
 # Eureka! Clinical Web Application Standard APIs
 Atlanta Clinical and Translational Science Institute (ACTSI), Emory University, Atlanta GA
 
+## What does it do?
+It provides standard APIs and related functionality that all Eureka! Clinical projects use. The [Eureka! Clinical Common Web Application Framework](https://github.com/eurekaclinical/eurekaclinical-common)
+supports standard web application APIs, including JPA, the Servlet API, JAX-RS, and JSR-330. This project
+sets the supported versions of those standards as dependencies. It also provides base classes and interfaces for building
+web applications that use those standards, including:
+* Reading application configuration from a properties file (`org.eurekaclinical.standardapis.props`)
+* An exception for communicating HTTP status for REST API responses (`org.eurekaclinical.standardapis.exception`)
+* Interfaces for JPA entities for users, roles and authorization templates (`org.eurekaclinical.standardapis.entity`)
+* Interfaces for implementing data access objects, and abstract classes for implementing data access objects for users, roles and authorization templates (`org.eurekaclinical.standardapis.dao`)
+* A filter for getting the user's roles using JPA and assigning them to the user principal (`org.eurekaclinical.standardapis.filter`)
+
 ## Version 2.0 development series
 Latest release: [![Latest release](https://maven-badges.herokuapp.com/maven-central/org.eurekaclinical/eurekaclinical-standard-apis/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.eurekaclinical/eurekaclinical-standard-apis)
 
@@ -13,17 +24,6 @@ The initial release provides standards-based implementations for creating JPA en
 * Servlet API 3.0.1
 * JAX-RS 2.0.1 (Java API for RESTful Web Services)
 * JSR-330 (standard @Inject and @Provider annotations)
-
-## What does it do?
-It provides standard APIs and related functionality that all Eureka! Clinical projects use. The [Eureka! Clinical Common Web Application Framework](https://github.com/eurekaclinical/eurekaclinical-common)
-supports standard web application APIs, including JPA, the Servlet API, JAX-RS, and JSR-330. This project
-sets the supported versions of those standards as dependencies. It also provides base classes and interfaces for building
-web applications that use those standards, including:
-* Reading application configuration from a properties file (`org.eurekaclinical.standardapis.props`)
-* An exception for communicating HTTP status for REST API responses (`org.eurekaclinical.standardapis.exception`)
-* Interfaces for JPA entities for users, roles and authorization templates (`org.eurekaclinical.standardapis.entity`)
-* Interfaces for implementing data access objects, and abstract classes for implementing data access objects for users, roles and authorization templates (`org.eurekaclinical.standardapis.dao`)
-* A filter for getting the user's roles using JPA and assigning them to the user principal (`org.eurekaclinical.standardapis.filter`)
 
 ## Build requirements
 * [Oracle Java JDK 8](http://www.oracle.com/technetwork/java/javase/overview/index.html)
