@@ -1,5 +1,5 @@
 # Eureka! Clinical Web Application Standard APIs
-Standard APIs and related functionality that all Eureka! Clinical projects use
+Atlanta Clinical and Translational Science Institute (ACTSI), Emory University, Atlanta GA
 
 ## Version 2.0 development series
 Latest release: [![Latest release](https://maven-badges.herokuapp.com/maven-central/org.eurekaclinical/eurekaclinical-standard-apis/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.eurekaclinical/eurekaclinical-standard-apis)
@@ -15,7 +15,7 @@ The initial release provides standards-based implementations for creating JPA en
 * JSR-330 (standard @Inject and @Provider annotations)
 
 ## What does it do?
-The [Eureka! Clinical Common Web Application Framework](https://github.com/eurekaclinical/eurekaclinical-common)
+It provides standard APIs and related functionality that all Eureka! Clinical projects use. The [Eureka! Clinical Common Web Application Framework](https://github.com/eurekaclinical/eurekaclinical-common)
 supports standard web application APIs, including JPA, the Servlet API, JAX-RS, and JSR-330. This project
 sets the supported versions of those standards as dependencies. It also provides base classes and interfaces for building
 web applications that use those standards, including:
