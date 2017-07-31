@@ -19,22 +19,20 @@ package org.eurekaclinical.standardapis.props;
  * limitations under the License.
  * #L%
  */
-import javax.ws.rs.core.UriBuilder;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Base class for implementing properties for Eureka! Clinical microservices.
+ * Base class for implementing properties for a Eureka! Clinical service.
  * 
  * @author hrathod
  */
-public abstract class CasEurekaClinicalProperties extends EurekaClinicalProperties {
+public abstract class CasJerseyEurekaClinicalProperties extends CasEurekaClinicalProperties {
 
     /**
      * The class level logger.
      */
-    private static final Logger LOGGER = LoggerFactory.getLogger(CasEurekaClinicalProperties.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CasJerseyEurekaClinicalProperties.class);
 
     /**
      * Loads the application configuration.
@@ -50,50 +48,20 @@ public abstract class CasEurekaClinicalProperties extends EurekaClinicalProperti
      * @param defaultConfigDir the default location of configuration file, based
      * on the operating system. Cannot be <code>null</code>.
      */
-    protected CasEurekaClinicalProperties(String defaultConfigDir) {
+    protected CasJerseyEurekaClinicalProperties(String defaultConfigDir) {
         super(defaultConfigDir);
     }
 
-    public abstract String getProxyCallbackServer();
-
-    public String getCasUrl() {
-        return this.getValue("cas.url", "https://localhost/cas-server");
-    }
-
-    public String getCasLoginUrl() {
-        UriBuilder builder = UriBuilder.fromUri(getCasUrl());
-        builder.path(this.getValue("cas.url.login", "/login"));
-        return builder.build().toString();
-    }
-
-    public String getCasLogoutUrl() {
-        UriBuilder builder = UriBuilder.fromUri(getCasUrl());
-        builder.path(this.getValue("cas.url.logout", "/logout"));
-        return builder.build().toString();
-    }
-    
-    /**
-     * Whether or not to use CAS renew mode for authentication. Renew mode
-     * will always present the authentication screen if the user does not
-     * already have an application session. Set to <code>false</code> by
-     * default.
-     * 
-     * @return <code>true</code> to use renew mode, <code>false</code>
-     * otherwise.
-     */
-    public boolean getCasLoginRenew() {
-        return Boolean.parseBoolean(getValue("cas.login.renew", "false"));
-    }
-    
     /**
      * Whether or not to use CAS gateway mode for authentication. Set to
-     * <code>false</code>. Subclasses may override this method to return
-     * <code>true</code> instead.
+     * <code>true</code> for Eureka! Clinical services because we never want
+     * the login screen.
      * 
-     * @return <code>false</code>.
+     * @return <code>true</code> always.
      */
+    @Override
     public boolean getCasLoginGateway() {
-        return false;
+        return true;
     }
     
 }
