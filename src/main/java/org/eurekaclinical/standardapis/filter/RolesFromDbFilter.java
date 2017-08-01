@@ -33,8 +33,6 @@ import org.eurekaclinical.standardapis.dao.UserDao;
 import org.eurekaclinical.standardapis.entity.RoleEntity;
 import org.eurekaclinical.standardapis.entity.UserEntity;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A filter to fetch roles from a database, and assign them to the current
