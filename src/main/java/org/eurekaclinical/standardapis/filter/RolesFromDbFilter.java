@@ -55,7 +55,4 @@ public abstract class RolesFromDbFilter extends AbstractRolesFilter {
         return roleNames;
     }
 
-    @Override
-    public void destroy() {
-    }
 }
