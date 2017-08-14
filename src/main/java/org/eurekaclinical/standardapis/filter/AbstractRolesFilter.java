@@ -77,7 +77,7 @@ public abstract class AbstractRolesFilter implements RolesFilter {
     /**
      * Gets the user's roles.
      * 
-     * @param principal the user's principal.
+     * @param principal the user's principal. Guaranteed not <code>null</code>.
      * 
      * @return the role names.
      * 
