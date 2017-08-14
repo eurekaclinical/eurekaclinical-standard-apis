@@ -2,9 +2,9 @@ package org.eurekaclinical.standardapis.filter;
 
 /*-
  * #%L
- * Eureka! Clinical Standard APIs
+ * Eureka! Clinical Common
  * %%
- * Copyright (C) 2016 Emory University
+ * Copyright (C) 2016 - 2017 Emory University
  * %%
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,30 +19,24 @@ package org.eurekaclinical.standardapis.filter;
  * limitations under the License.
  * #L%
  */
-import java.io.IOException;
 import java.security.Principal;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import javax.servlet.*;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.eurekaclinical.standardapis.dao.UserDao;
 import org.eurekaclinical.standardapis.entity.RoleEntity;
 import org.eurekaclinical.standardapis.entity.UserEntity;
 
-
 /**
- * A filter to fetch roles from a database, and assign them to the current
- * principal.
+ * Filter that adds the user's roles from a database to the 
+ * request by accessing the {@link UserDao}. Users of this filter must bind
+ * {@link UserDao} in their Guice configuration.
  *
- * @author hrathod
- *
+ * @author Andrew Post
  */
 @Singleton
-public class RolesFromDbFilter implements RolesFilter {
+public abstract class RolesFromDbFilter extends AbstractRolesFilter {
 
     private final UserDao<? extends UserEntity<? extends RoleEntity>> userDao;
 
@@ -52,33 +46,18 @@ public class RolesFromDbFilter implements RolesFilter {
     }
 
     @Override
-    public void init(FilterConfig fc) throws ServletException {
-    }
-
-    @Override
-    public void doFilter(ServletRequest inRequest, ServletResponse inResponse,
-            FilterChain inChain) throws IOException, ServletException {
-        HttpServletRequest servletRequest = (HttpServletRequest) inRequest;
-        Principal principal = servletRequest.getUserPrincipal();
-        if (principal != null) {
-            UserEntity<? extends RoleEntity> user = this.userDao.getByPrincipal(principal);
-            Set<String> roles = new HashSet<>();
-            if (user != null) {
-                List<? extends RoleEntity> roleEntities = user.getRoles();
-                for (RoleEntity roleEntity : roleEntities) {
-                    roles.add(roleEntity.getName());
-                }
-            }
-            HttpServletRequest wrappedRequest = new RolesRequestWrapper(
-                    servletRequest, principal, roles);
-            inChain.doFilter(wrappedRequest, inResponse);
-        } else {
-            inChain.doFilter(inRequest, inResponse);
+    protected String[] getRoles(HttpSession session, Principal principal) {
+        UserEntity<? extends RoleEntity> user = this.userDao.getByPrincipal(principal);
+        List<? extends RoleEntity> roles = user.getRoles();
+        String[] roleNames = new String[roles.size()];
+        int i = 0;
+        for (RoleEntity re : roles) {
+            roleNames[i++] = re.getName();
         }
+        return roleNames;
     }
 
     @Override
     public void destroy() {
     }
-
 }

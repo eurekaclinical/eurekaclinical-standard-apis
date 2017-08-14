@@ -21,6 +21,7 @@ package org.eurekaclinical.standardapis.filter;
  */
 
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,12 +38,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class RolesRequestWrapper extends HttpServletRequestWrapper {
-
-    /**
-     * The class level logger.
-     */
-    private static final Logger LOGGER = LoggerFactory
-            .getLogger(RolesRequestWrapper.class);
 
     /**
      * The original principal.
@@ -67,11 +62,14 @@ public class RolesRequestWrapper extends HttpServletRequestWrapper {
      * @param inRoles The roles assigned to the principal.
      */
     public RolesRequestWrapper(HttpServletRequest inRequest,
-            Principal inPrincipal, Set<String> inRoles) {
+            Principal inPrincipal, String[] inRoles) {
         super(inRequest);
         this.request = inRequest;
         this.principal = inPrincipal;
-        this.roles = inRoles;
+        this.roles = new HashSet<>();
+        for (String role : inRoles) {
+            this.roles.add(role);
+        }
     }
 
     /*
