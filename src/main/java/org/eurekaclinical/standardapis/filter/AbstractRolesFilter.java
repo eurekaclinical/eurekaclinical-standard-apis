@@ -38,12 +38,17 @@ import javax.servlet.http.HttpSession;
  */
 public abstract class AbstractRolesFilter implements RolesFilter {
 
+    /**
+     * Does nothing.
+     * 
+     * @param fc the filter configuration.
+     */
     @Override
-    public void init(FilterConfig fc) throws ServletException {
+    public void init(FilterConfig fc) {
     }
 
     @Override
-    public void doFilter(ServletRequest inRequest, ServletResponse inResponse, FilterChain inChain) throws IOException, ServletException {
+    public final void doFilter(ServletRequest inRequest, ServletResponse inResponse, FilterChain inChain) throws IOException, ServletException {
         HttpServletRequest servletRequest = (HttpServletRequest) inRequest;
         String username = servletRequest.getRemoteUser();
         if (username != null) {
@@ -56,7 +61,7 @@ public abstract class AbstractRolesFilter implements RolesFilter {
             String[] roleNames = (String[]) session.getAttribute("roles");
 
             if (roleNames == null) {
-                roleNames = getRoles(session, principal);
+                roleNames = getRoles(principal);
                 session.setAttribute("roles", roleNames);
             }
             
@@ -69,8 +74,20 @@ public abstract class AbstractRolesFilter implements RolesFilter {
         }
     }
 
-    protected abstract String[] getRoles(HttpSession session, Principal principal) throws ServletException;
+    /**
+     * Gets the user's roles.
+     * 
+     * @param principal the user's principal.
+     * 
+     * @return the role names.
+     * 
+     * @throws ServletException if an error occurred getting role information.
+     */
+    protected abstract String[] getRoles(Principal principal) throws ServletException;
 
+    /**
+     * Does nothing.
+     */
     @Override
     public void destroy() {
     }

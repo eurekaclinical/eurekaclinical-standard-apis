@@ -23,15 +23,13 @@ import java.security.Principal;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.servlet.http.HttpSession;
 import org.eurekaclinical.standardapis.dao.UserDao;
 import org.eurekaclinical.standardapis.entity.RoleEntity;
 import org.eurekaclinical.standardapis.entity.UserEntity;
 
 /**
- * Filter that adds the user's roles from a database to the 
- * request by accessing the {@link UserDao}. Users of this filter must bind
- * {@link UserDao} in their Guice configuration.
+ * Filter that adds the user's roles from a {@link UserDao} to the request. 
+ * Users of this filter must bind {@link UserDao} in their Guice configuration.
  *
  * @author Andrew Post
  */
@@ -46,7 +44,7 @@ public abstract class RolesFromDbFilter extends AbstractRolesFilter {
     }
 
     @Override
-    protected String[] getRoles(HttpSession session, Principal principal) {
+    protected String[] getRoles(Principal principal) {
         UserEntity<? extends RoleEntity> user = this.userDao.getByPrincipal(principal);
         List<? extends RoleEntity> roles = user.getRoles();
         String[] roleNames = new String[roles.size()];
