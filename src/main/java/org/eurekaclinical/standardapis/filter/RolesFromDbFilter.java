@@ -34,7 +34,7 @@ import org.eurekaclinical.standardapis.entity.UserEntity;
  * @author Andrew Post
  */
 @Singleton
-public abstract class RolesFromDbFilter extends AbstractRolesFilter {
+public class RolesFromDbFilter extends AbstractRolesFilter {
 
     private final UserDao<? extends UserEntity<? extends RoleEntity>> userDao;
 
