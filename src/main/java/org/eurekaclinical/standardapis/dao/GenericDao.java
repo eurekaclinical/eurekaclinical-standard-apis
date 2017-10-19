@@ -225,6 +225,26 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
     }
     
     /**
+     * Executes a query for all entities whose path value is the same as the 
+     * given target value. The path is provided by the 
+     * {@link QueryPathProvider} and is followed through to get the resulting 
+     * value. That resulting value is compared to the given target value in the 
+     * query.
+     *
+     * @param provider provides the path from the entity to the target
+     * attribute/column.
+     * @param value the target value to compare with the resulting attribute
+     * value.
+     * @param <Y> the type of the target value and resulting attribute/column
+     * value.
+     * @return a list of entities that match the given criteria.
+     */
+    protected final <Y> List<T> getListByAttribute(QueryPathProvider<T, Y> provider, Y value) {
+        return new DatabaseSupport(getEntityManager())
+                .getListByAttribute(this.entityClass, provider, value);
+    }
+    
+    /**
      * Gets the entities that have any of the target values of the specified
      * attribute.
      * 
@@ -237,24 +257,24 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
         return new DatabaseSupport(getEntityManager())
                 .getListByAttributeIn(this.entityClass, attribute, values);
     }
-
+    
     /**
-     * Executes a query for all entities whose path value is the same as the 
-     * given target value. The path is provided by the QueryPathProvider, and 
+     * Executes a query for all entities whose path value is any of the target
+     * values. The path is provided by the {@link QueryPathProvider} and 
      * is followed through to get the resulting value. That resulting value is 
-     * compared to the given target value in the query.
+     * compared to the given target values in the query.
      *
-     * @param provider Provides the path from the entity to the target
+     * @param <Y> the type of the target value and resulting attribute/column
+     * value.
+     * @param provider provides the path from the entity to the target
      * attribute/column.
-     * @param value The target value to compare with the resulting attribute
-     * value.
-     * @param <Y> The type of the target value and resulting attribute/column
-     * value.
+     * @param values the target values of the given attribute.
+     * 
      * @return A list of entities that match the given criteria.
      */
-    protected final <Y> List<T> getListByAttribute(QueryPathProvider<T, Y> provider, Y value) {
+    protected final <Y> List<T> getListByAttributeIn(QueryPathProvider<T, Y> provider, List<Y> values) {
         return new DatabaseSupport(getEntityManager())
-                .getListByAttribute(this.entityClass, provider, value);
+                .getListByAttributeIn(this.entityClass, provider, values);
     }
 
     /**
