@@ -163,6 +163,7 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      * ascending order.
      * 
      * @param attribute the attribute to order by.
+     * 
      * @return an ordered list of entities. Guaranteed not <code>null</code>.
      */
     protected final List<T> getListAsc(SingularAttribute<T, ?> attribute) {
@@ -217,6 +218,7 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      * @param <Y> the type of the attribute and target value.
      * @param attribute the attribute of the entity to compare.
      * @param value the target value of the given attribute.
+     * 
      * @return the matching entities. Guaranteed not <code>null</code>.
      */
     protected final <Y> List<T> getListByAttribute(SingularAttribute<T, Y> attribute, Y value) {
@@ -237,6 +239,7 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      * value.
      * @param <Y> the type of the target value and resulting attribute/column
      * value.
+     * 
      * @return a list of entities that match the given criteria.
      */
     protected final <Y> List<T> getListByAttribute(QueryPathProvider<T, Y> provider, Y value) {
@@ -251,6 +254,7 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      * @param <Y> the type of the attribute and target value.
      * @param attribute the attribute of the entity to compare.
      * @param values the target values of the given attribute.
+     * 
      * @return the matching entities. Guaranteed not <code>null</code>.
      */
     protected final <Y> List<T> getListByAttributeIn(SingularAttribute<T, Y> attribute, List<Y> values) {
