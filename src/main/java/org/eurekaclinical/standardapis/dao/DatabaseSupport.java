@@ -19,6 +19,7 @@ package org.eurekaclinical.standardapis.dao;
  * limitations under the License.
  * #L%
  */
+import java.util.Date;
 import java.util.List;
 import javax.inject.Provider;
 import javax.persistence.EntityManager;
@@ -31,6 +32,7 @@ import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.SingularAttribute;
+import org.eurekaclinical.standardapis.entity.HistoricalEntity;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,6 +126,7 @@ public final class DatabaseSupport {
      * <code>null</code>.
      * @return the instances requested. Guaranteed not <code>null</code>.
      */
+    @SuppressWarnings("unchecked")
     public <T> List<T> getAll(Class<T> entityCls) {
         if (entityCls == null) {
             throw new IllegalArgumentException("entityCls cannot be null");
@@ -135,22 +138,114 @@ public final class DatabaseSupport {
         criteriaQuery.from(entityCls);
         TypedQuery<T> typedQuery
                 = entityManager.createQuery(criteriaQuery);
-        List<T> jobs = typedQuery.getResultList();
-        return jobs;
+        List<T> results = typedQuery.getResultList();
+        return results;
     }
 
     /**
-     * Gets the entity that has the specified value of an
-     * attribute. This method assumes that at most one instance of the given
-     * entity will be a match. This typically is used with attributes with a
-     * uniqueness constraint.
+     * Gets every instance of the specified historical entity in the database.
+     *
+     * @param <T> the type of the entity.
+     * @param historicalEntityCls the class of the specified historical entity.
+     * The entity must be a subtype of {@link HistoricalEntity}. Cannot be
+     * <code>null</code>.
+     * @return the instances requested. Guaranteed not <code>null</code>.
+     */
+    public <T extends HistoricalEntity> List<T> getCurrent(Class<T> historicalEntityCls) {
+        EntityManager entityManager = this.entityManagerProvider.get();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = builder.createQuery(historicalEntityCls);
+        Root<T> root = criteriaQuery.from(historicalEntityCls);
+        criteriaQuery.where(expiredAt(root, builder));
+        TypedQuery<T> typedQuery = entityManager.createQuery(criteriaQuery);
+        return typedQuery.getResultList();
+    }
+
+    /**
+     * Gets the instance of the specified historical entity in the database
+     * that has the given value of the given attribute.
+     *
+     * @param <T> the type of the entity.The entity must be a subtype of
+     * {@link HistoricalEntity}. Cannot be <code>null</code>.
+     * @param <Y> the attribute's type.
+     * @param historicalEntityCls the class of the specified historical entity.
+     * @param attribute the attribute. Cannot be <code>null</code>.
+     * @param value the value. Cannot be <code>null</code>.
+     *
+     * @return the instance requested. Guaranteed not <code>null</code>.
+     */
+    public <T extends HistoricalEntity, Y> T getCurrentUniqueByAttribute(
+            Class<T> historicalEntityCls, 
+            SingularAttribute<T, Y> attribute, Y value) {
+        EntityManager entityManager = this.entityManagerProvider.get();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = builder.createQuery(historicalEntityCls);
+        Root<T> root = criteriaQuery.from(historicalEntityCls);
+        Predicate whereClause = builder.and(
+                builder.equal(root.get(attribute), value),
+                expiredAt(root, builder));
+        criteriaQuery.where(whereClause);
+        TypedQuery<T> query = entityManager.createQuery(criteriaQuery);
+        T result = null;
+        try {
+            result = query.getSingleResult();
+        } catch (NonUniqueResultException nure) {
+            LOGGER.warn("Result not unique for {}: {} = {}",
+                    historicalEntityCls.getName(), attribute.getName(), value);
+            result = query.getResultList().get(0);
+        } catch (NoResultException nre) {
+            LOGGER.debug("Result not existant for {}: {} = {}",
+                    historicalEntityCls.getName(), attribute.getName(), value);
+        }
+        return result;
+    }
+    
+    /**
+     * Gets every instance of the specified historical entity in the database
+     * that has the given value of the given attribute.
+     *
+     * @param <T> the type of the entity.The entity must be a subtype of
+     * {@link HistoricalEntity}. Cannot be <code>null</code>.
+     * @param <Y> the attribute's type.
+     * @param historicalEntityCls the class of the specified historical entity.
+     * @param attribute the attribute. Cannot be <code>null</code>.
+     * @param value the value. Cannot be <code>null</code>.
+     *
+     * @return the instance requested. Guaranteed not <code>null</code>.
+     */
+    public <T extends HistoricalEntity, Y> List<T> getCurrentListByAttribute(
+            Class<T> historicalEntityCls, 
+            SingularAttribute<T, Y> attribute, Y value) {
+        EntityManager entityManager = this.entityManagerProvider.get();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = builder.createQuery(historicalEntityCls);
+        Root<T> root = criteriaQuery.from(historicalEntityCls);
+        Predicate whereClause = builder.and(
+                builder.equal(root.get(attribute), value),
+                expiredAt(root, builder));
+        criteriaQuery.where(whereClause);
+        TypedQuery<T> typedQuery = entityManager.createQuery(criteriaQuery);
+        return typedQuery.getResultList();
+    }
+
+    private <T> Predicate expiredAt(Root<T> root, CriteriaBuilder builder) {
+        Path<Date> expiredAt = root.get("expiredAt");
+        return builder.or(
+                builder.isNull(root.get("expiredAt")),
+                builder.greaterThanOrEqualTo(expiredAt, new Date()));
+    }
+
+    /**
+     * Gets the entity that has the specified value of an attribute. This method
+     * assumes that at most one instance of the given entity will be a match.
+     * This typically is used with attributes with a uniqueness constraint.
      *
      * @param <T> the type of the entity.
      * @param <Y> the type of the attribute.
      * @param entityCls the entity class. Cannot be <code>null</code>.
      * @param attribute the attribute. Cannot be <code>null</code>.
-     * @param value the value. If there is more than one matching instance, 
-     * only the first will be returned, and a warning will be logged.
+     * @param value the value. If there is more than one matching instance, only
+     * the first will be returned, and a warning will be logged.
      *
      * @return the matching instance, or <code>null</code> if there is none.
      */
@@ -167,21 +262,21 @@ public final class DatabaseSupport {
         try {
             result = query.getSingleResult();
         } catch (NonUniqueResultException nure) {
-            LOGGER.warn("Result not unique for {}: {} = {}", 
+            LOGGER.warn("Result not unique for {}: {} = {}",
                     entityCls.getName(), attribute.getName(), value);
             result = query.getResultList().get(0);
         } catch (NoResultException nre) {
-            LOGGER.debug("Result not existant for {}: {} = {}", 
+            LOGGER.debug("Result not existant for {}: {} = {}",
                     entityCls.getName(), attribute.getName(), value);
         }
         return result;
     }
 
     /**
-     * Executes a query for the entity with the given
-     * attribute value. This method assumes that at most one instance of the
-     * given entity will be a match. This typically is used with attributes with
-     * a uniqueness constraint.
+     * Executes a query for the entity with the given attribute value. This
+     * method assumes that at most one instance of the given entity will be a
+     * match. This typically is used with attributes with a uniqueness
+     * constraint.
      *
      * @param <T> the type of the entity.
      * @param <Y> the type of the attribute.
@@ -206,19 +301,19 @@ public final class DatabaseSupport {
         try {
             result = query.getSingleResult();
         } catch (NonUniqueResultException nure) {
-            LOGGER.warn("Result not unique for {}: {} = {}", 
+            LOGGER.warn("Result not unique for {}: {} = {}",
                     entityCls.getName(), attributeName, value);
             result = query.getResultList().get(0);
         } catch (NoResultException nre) {
-            LOGGER.debug("Result not existant for {}: {} = {}", 
+            LOGGER.debug("Result not existant for {}: {} = {}",
                     entityCls.getName(), attributeName, value);
         }
         return result;
     }
 
     /**
-     * Executes a query for the entities that have the specified
-     * value of the given attribute.
+     * Executes a query for the entities that have the specified value of the
+     * given attribute.
      *
      * @param <T> the type of the entity.
      * @param <Y> the type of the attribute.
@@ -241,8 +336,8 @@ public final class DatabaseSupport {
     }
 
     /**
-     * Executes a query for the entities that have the specified
-     * values of the given numerical attribute.
+     * Executes a query for the entities that have the specified values of the
+     * given numerical attribute.
      *
      * @param <T> the type of the entity.
      * @param <Y> the type of the numerical attribute.
@@ -265,13 +360,13 @@ public final class DatabaseSupport {
         if (comparator == null) {
             throw new IllegalArgumentException("comparator cannot be null");
         }
-        TypedQuery<T> query = createTypedQuery(entityCls, attribute, 
+        TypedQuery<T> query = createTypedQuery(entityCls, attribute,
                 comparator, value);
         return query.getResultList();
     }
 
     /**
-     * Executes a query for entities that have any of the given attribute 
+     * Executes a query for entities that have any of the given attribute
      * values.
      *
      * @param <T> the type of the entity.
@@ -296,10 +391,10 @@ public final class DatabaseSupport {
     }
 
     /**
-     * Executes a query for entities that match the given path value. The path 
-     * may traverse one or more entity relationships, and is followed through 
-     * to get the resulting attribute. That attribute's value is compared to 
-     * the given target value.
+     * Executes a query for entities that match the given path value. The path
+     * may traverse one or more entity relationships, and is followed through to
+     * get the resulting attribute. That attribute's value is compared to the
+     * given target value.
      *
      * @param <T> the type of the entity class.
      * @param <Y> the type of the target value and resulting attribute/column
@@ -319,16 +414,16 @@ public final class DatabaseSupport {
         if (provider == null) {
             throw new IllegalArgumentException("provider cannot be null");
         }
-        TypedQuery<T> typedQuery = 
-                createTypedQuery(entityCls, provider, value);
+        TypedQuery<T> typedQuery
+                = createTypedQuery(entityCls, provider, value);
         return typedQuery.getResultList();
     }
-    
+
     /**
-     * Executes a query for entities that match the given path value. The path 
-     * may traverse one or more entity relationships, and is followed through 
-     * to get the resulting attribute. That attribute's value is compared to 
-     * the given target value.
+     * Executes a query for entities that match the given path value. The path
+     * may traverse one or more entity relationships, and is followed through to
+     * get the resulting attribute. That attribute's value is compared to the
+     * given target value.
      *
      * @param <T> the type of the entity class.
      * @param <Y> the type of the target value and resulting attribute/column
@@ -348,14 +443,14 @@ public final class DatabaseSupport {
         if (provider == null) {
             throw new IllegalArgumentException("provider cannot be null");
         }
-        TypedQuery<T> typedQuery = 
-                createTypedQueryIn(entityCls, provider, values);
+        TypedQuery<T> typedQuery
+                = createTypedQueryIn(entityCls, provider, values);
         return typedQuery.getResultList();
     }
-    
+
     /**
-     * Creates a typed query for entities that match any of the specified 
-     * values of the resulting attribute.
+     * Creates a typed query for entities that match any of the specified values
+     * of the resulting attribute.
      *
      * @param <T> the type of the entity class.
      * @param <Y> the type of the target value and resulting attribute/column
@@ -382,9 +477,9 @@ public final class DatabaseSupport {
         }
         return entityManager.createQuery(criteriaQuery.where(in));
     }
-    
+
     /**
-     * Creates a typed query for entities that have the resulting attribute 
+     * Creates a typed query for entities that have the resulting attribute
      * value.
      *
      * @param <T> the type of the entity class.
@@ -406,8 +501,8 @@ public final class DatabaseSupport {
     }
 
     /**
-     * Creates a typed query for entities that match any of the specified 
-     * values of the given attribute.
+     * Creates a typed query for entities that match any of the specified values
+     * of the given attribute.
      *
      * @param <T> the type of the entity class.
      * @param <Y>
@@ -431,7 +526,7 @@ public final class DatabaseSupport {
         }
         return entityManager.createQuery(criteriaQuery.where(in));
     }
-    
+
     /**
      * Creates a typed query for entities that have the given attribute value.
      *
@@ -473,7 +568,7 @@ public final class DatabaseSupport {
     }
 
     /**
-     * Creates a typed query for entities with the given numerical attribute 
+     * Creates a typed query for entities with the given numerical attribute
      * value.
      *
      * @param <T> the type of the entity to return.
