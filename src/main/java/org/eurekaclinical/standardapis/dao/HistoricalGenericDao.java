@@ -61,10 +61,7 @@ public class HistoricalGenericDao<E extends HistoricalEntity<PK>, PK> extends Ge
         entity.setCreatedAt(oldEntity.getCreatedAt());
         entity.setEffectiveAt(now);
         entity.setExpiredAt(null);
-        create(entity);
-
-        return entity;
-
+        return super.create(entity);
     }
 
 }
