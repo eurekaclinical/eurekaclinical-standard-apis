@@ -24,7 +24,7 @@ package org.eurekaclinical.standardapis.entity;
  *
  * @author arpost
  */
-public interface RoleEntity extends Entity {
+public interface RoleEntity extends Entity<Long> {
 
     /**
      * Get the role's identification number.

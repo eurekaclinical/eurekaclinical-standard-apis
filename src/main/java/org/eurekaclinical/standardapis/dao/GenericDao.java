@@ -29,7 +29,6 @@ import javax.persistence.metamodel.SingularAttribute;
 
 import javax.inject.Provider;
 import javax.persistence.NoResultException;
-import org.eurekaclinical.standardapis.entity.HistoricalEntity;
 
 /**
  * Generic implementation of the {@link Dao} interface. It is a wrapper around

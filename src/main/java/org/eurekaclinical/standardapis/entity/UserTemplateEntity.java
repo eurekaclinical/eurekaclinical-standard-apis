@@ -26,7 +26,7 @@ import java.util.List;
  *
  * @author Andrew Post
  */
-public interface UserTemplateEntity<R extends RoleEntity> extends Entity {
+public interface UserTemplateEntity<R extends RoleEntity> extends Entity<Long> {
     /**
      * Get the user's unique identifier.
      *

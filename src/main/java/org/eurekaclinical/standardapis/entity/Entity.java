@@ -21,11 +21,26 @@ package org.eurekaclinical.standardapis.entity;
  */
 
 /**
- *
+ * A generic entity interface. Eureka! Clinical entities that implement this
+ * interface will have a primary key field called <code>id</code>, which is 
+ * declared here.
+ * 
  * @author Andrew Post
+ * @param <PK> the primary key type, usually a <code>Long</code>.
  */
-public interface Entity {
-    Long getId();
+public interface Entity<PK> {
     
-    void setId(Long inId);
+    /**
+     * Gets the primary key.
+     * 
+     * @return the primary key.
+     */
+    PK getId();
+    
+    /**
+     * Sets the primary key.
+     * 
+     * @param inId the primary key.
+     */
+    void setId(PK inId);
 }

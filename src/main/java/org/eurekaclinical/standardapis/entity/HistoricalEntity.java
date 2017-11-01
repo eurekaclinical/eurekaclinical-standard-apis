@@ -23,48 +23,62 @@ package org.eurekaclinical.standardapis.entity;
 import java.util.Date;
 
 /**
- * Interface for entities for which the database stores a record of the current
- * and previous historical states of its instances. The time period in
- * which each state was or is valid is denoted by an effective date and an 
- * expiration date. Updating an entity instance will expire the current
- * record in the database and create a new record. Deleting an entity instance
- * will expire the current record in the database but will not physically
- * delete it. Data access objects for historical entities only return instances 
- * that are valid at the time of the query unless otherwise specified.
+ * Interface for entities that maintain their historical state. Corresponding 
+ * real-world objects will have one or more entity instances, each representing 
+ * the object's state between the effective and expired datetimes. Updates will 
+ * expire the object's most recent record in the database and create a new 
+ * record. Deletes will expire the current record in the database but will not 
+ * physically delete it. Data access objects for historical entities only 
+ * return instances that are valid at the time of the query unless otherwise 
+ * specified.
  *
  * @author Andrew Post
  * 
- * @param <E> the entity type.
  */
-public interface HistoricalEntity<E> {
+public interface HistoricalEntity<PK> extends Entity<PK> {
 
     /**
-     * Returns the timestamp at which this state became effective.
+     * Returns the effective datetime of this entity instance.
      * 
-     * @return a timestamp.
+     * @return a datetime.
      */
     Date getEffectiveAt();
 
     /**
-     * Sets the timestamp at which this state became effective.
+     * Sets the effective datetime of this entity instance.
      * 
-     * @param effectiveAt a timestamp.
+     * @param effectiveAt a datetime.
      */
     void setEffectiveAt(Date effectiveAt);
 
     /**
-     * Returns the timestamp at which this state expired.
+     * Returns the datetime at which this entity instance expired.
      * 
-     * @return a timestamp.
+     * @return a datetime.
      */
     Date getExpiredAt();
 
     /**
-     * Sets the timestamp at which this state expired.
+     * Sets the timestamp at which this entity instance expired.
      * 
-     * @param expiredAt a timestamp.
+     * @param expiredAt a datetime.
      */
     void setExpiredAt(Date expiredAt);
     
-    E copySelf();
+    /**
+     * Gets the datetime at which the first entity instance corresponding to
+     * this real-world object was created.
+     * 
+     * @return a datetime
+     */
+    Date getCreatedAt();
+    
+    /**
+     * Sets the datetime at which the first entity instance corresponding to
+     * this real-world object was created.
+     * 
+     * @param createdAt a datetime.
+     */
+    void setCreatedAt(Date createdAt);
+    
 }

@@ -27,7 +27,7 @@ import java.util.List;
  * @author Andrew Post
  * @param <R> a role type.
  */
-public interface UserEntity<R extends RoleEntity> extends Entity {
+public interface UserEntity<R extends RoleEntity> extends Entity<Long> {
 
     /**
      * Get the user's unique identifier.
