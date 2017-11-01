@@ -78,8 +78,8 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      *
      */
     @Override
-    public final T create(T entity) {
-        EntityManager entityManager = this.getEntityManager();
+    public T create(T entity) {
+        EntityManager entityManager = getEntityManager();
         entityManager.persist(entity);
         return entity;
     }
@@ -96,7 +96,7 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      */
     @Override
     public final T retrieve(PK uniqueId) {
-        return this.getEntityManager().find(this.entityClass, uniqueId);
+        return getEntityManager().find(getEntityClass(), uniqueId);
     }
 
     /**
@@ -109,8 +109,8 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      * @return the updated entity.
      */
     @Override
-    public final T update(T entity) {
-        EntityManager entityManager = this.getEntityManager();
+    public T update(T entity) {
+        EntityManager entityManager = getEntityManager();
         T result = entityManager.merge(entity);
         return result;
     }
@@ -125,8 +125,8 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      * @return the deleted entity.
      */
     @Override
-    public final T remove(T entity) {
-        EntityManager entityManager = this.getEntityManager();
+    public T remove(T entity) {
+        EntityManager entityManager = getEntityManager();
         if (entityManager.contains(entity)) {
             entityManager.remove(entity);
         } else {
@@ -143,7 +143,7 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      * @return the refreshed entity.
      */
     @Override
-    public final T refresh(T entity) {
+    public T refresh(T entity) {
         this.getEntityManager().refresh(entity);
         return entity;
     }
@@ -154,8 +154,8 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      * @return a list of entities. Guaranteed not <code>null</code>.
      */
     @Override
-    public final List<T> getAll() {
-        return this.databaseSupport.getAll(this.entityClass);
+    public List<T> getAll() {
+        return getDatabaseSupport().getAll(getEntityClass());
     }
 
     /**
@@ -166,11 +166,11 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      *
      * @return an ordered list of entities. Guaranteed not <code>null</code>.
      */
-    protected final List<T> getListAsc(SingularAttribute<T, ?> attribute) {
+    protected List<T> getListAsc(SingularAttribute<T, ?> attribute) {
         EntityManager entityManager = this.getEntityManager();
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<T> criteriaQuery = builder.createQuery(this.entityClass);
-        Root<T> root = criteriaQuery.from(this.entityClass);
+        CriteriaQuery<T> criteriaQuery = builder.createQuery(getEntityClass());
+        Root<T> root = criteriaQuery.from(getEntityClass());
         criteriaQuery.orderBy(builder.asc(root.get(attribute)));
         return entityManager.createQuery(criteriaQuery).getResultList();
     }
@@ -184,10 +184,10 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      *
      * @return the matching entity, or <code>null</code> if there is none.
      */
-    protected final <Y> T getUniqueByAttribute(SingularAttribute<T, Y> attribute,
+    protected <Y> T getUniqueByAttribute(SingularAttribute<T, Y> attribute,
             Y value) {
         try {
-            return this.databaseSupport.getUniqueByAttribute(this.entityClass, attribute, value);
+            return getDatabaseSupport().getUniqueByAttribute(getEntityClass(), attribute, value);
         } catch (NoResultException ex) {
             return null;
         }
@@ -202,9 +202,9 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      *
      * @return the matching entity, or <code>null</code> if there is none.
      */
-    protected final <Y> T getUniqueByAttribute(String attributeName, Y value) {
+    protected <Y> T getUniqueByAttribute(String attributeName, Y value) {
         try {
-            return this.databaseSupport.getUniqueByAttribute(this.entityClass, attributeName, value);
+            return getDatabaseSupport().getUniqueByAttribute(getEntityClass(), attributeName, value);
         } catch (NoResultException ex) {
             return null;
         }
@@ -219,8 +219,8 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      *
      * @return the matching entities. Guaranteed not <code>null</code>.
      */
-    protected final <Y> List<T> getListByAttribute(SingularAttribute<T, Y> attribute, Y value) {
-        return this.databaseSupport.getListByAttribute(this.entityClass, attribute, value);
+    protected <Y> List<T> getListByAttribute(SingularAttribute<T, Y> attribute, Y value) {
+        return getDatabaseSupport().getListByAttribute(getEntityClass(), attribute, value);
     }
 
     /**
@@ -238,8 +238,8 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      *
      * @return a list of entities that match the given criteria.
      */
-    protected final <Y> List<T> getListByAttribute(QueryPathProvider<T, Y> provider, Y value) {
-        return this.databaseSupport.getListByAttribute(this.entityClass, provider, value);
+    protected <Y> List<T> getListByAttribute(QueryPathProvider<T, Y> provider, Y value) {
+        return getDatabaseSupport().getListByAttribute(getEntityClass(), provider, value);
     }
 
     /**
@@ -252,8 +252,8 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      *
      * @return the matching entities. Guaranteed not <code>null</code>.
      */
-    protected final <Y> List<T> getListByAttributeIn(SingularAttribute<T, Y> attribute, List<Y> values) {
-        return this.databaseSupport.getListByAttributeIn(this.entityClass, attribute, values);
+    protected <Y> List<T> getListByAttributeIn(SingularAttribute<T, Y> attribute, List<Y> values) {
+        return getDatabaseSupport().getListByAttributeIn(getEntityClass(), attribute, values);
     }
 
     /**
@@ -270,8 +270,8 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      *
      * @return A list of entities that match the given criteria.
      */
-    protected final <Y> List<T> getListByAttributeIn(QueryPathProvider<T, Y> provider, List<Y> values) {
-        return this.databaseSupport.getListByAttributeIn(this.entityClass, provider, values);
+    protected <Y> List<T> getListByAttributeIn(QueryPathProvider<T, Y> provider, List<Y> values) {
+        return getDatabaseSupport().getListByAttributeIn(getEntityClass(), provider, values);
     }
 
     /**
@@ -280,12 +280,16 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      *
      * @return the entity manager.
      */
-    protected final EntityManager getEntityManager() {
+    protected EntityManager getEntityManager() {
         return this.managerProvider.get();
     }
     
-    protected final DatabaseSupport getDatabaseSupport() {
+    protected DatabaseSupport getDatabaseSupport() {
         return this.databaseSupport;
+    }
+    
+    protected Class<T> getEntityClass() {
+        return this.entityClass;
     }
 
 }

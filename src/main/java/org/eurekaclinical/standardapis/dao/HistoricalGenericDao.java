@@ -33,15 +33,22 @@ import org.eurekaclinical.standardapis.entity.HistoricalEntity;
  * @param <PK> the primary key type.
  */
 public class HistoricalGenericDao<E extends HistoricalEntity<PK>, PK> extends GenericDao<E, PK> {
-    private final Class<E> entityClass;
 
     public HistoricalGenericDao(Class<E> inEntityClass, Provider<EntityManager> inManagerProvider) {
         super(inEntityClass, inManagerProvider);
-        this.entityClass = inEntityClass;
+    }
+
+    @Override
+    public E create(E entity) {
+        Date now = new Date();
+        entity.setCreatedAt(now);
+        entity.setEffectiveAt(now);
+        entity.setExpiredAt(null);
+        return super.create(entity);
     }
     
     public List<E> getCurrent() {
-        return getDatabaseSupport().getCurrent(this.entityClass);
+        return getDatabaseSupport().getCurrent(getEntityClass());
     }
 
     public E updateCurrent(E entity) {
@@ -51,6 +58,7 @@ public class HistoricalGenericDao<E extends HistoricalEntity<PK>, PK> extends Ge
         update(oldEntity);
 
         entity.setId(null);
+        entity.setCreatedAt(oldEntity.getCreatedAt());
         entity.setEffectiveAt(now);
         entity.setExpiredAt(null);
         create(entity);
