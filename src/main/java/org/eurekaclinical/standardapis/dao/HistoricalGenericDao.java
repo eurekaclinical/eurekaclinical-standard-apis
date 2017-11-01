@@ -53,7 +53,6 @@ public class HistoricalGenericDao<E extends HistoricalEntity<PK>, PK> extends Ge
         entity.setId(null);
         entity.setEffectiveAt(now);
         entity.setExpiredAt(null);
-        entity.setCreatedAt(now);
         create(entity);
 
         return entity;
