@@ -21,6 +21,7 @@ package org.eurekaclinical.standardapis.dao;
  */
 
 import java.util.Date;
+import java.util.List;
 import javax.inject.Provider;
 import javax.persistence.EntityManager;
 import org.eurekaclinical.standardapis.entity.HistoricalEntity;
@@ -32,9 +33,15 @@ import org.eurekaclinical.standardapis.entity.HistoricalEntity;
  * @param <PK> the primary key type.
  */
 public class HistoricalGenericDao<E extends HistoricalEntity<PK>, PK> extends GenericDao<E, PK> {
+    private final Class<E> entityClass;
 
     public HistoricalGenericDao(Class<E> inEntityClass, Provider<EntityManager> inManagerProvider) {
         super(inEntityClass, inManagerProvider);
+        this.entityClass = inEntityClass;
+    }
+    
+    public List<E> getCurrent() {
+        return getDatabaseSupport().getCurrent(this.entityClass);
     }
 
     public E updateCurrent(E entity) {

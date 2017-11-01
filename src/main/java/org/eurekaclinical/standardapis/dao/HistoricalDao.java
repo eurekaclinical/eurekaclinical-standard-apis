@@ -31,9 +31,11 @@ import org.eurekaclinical.standardapis.entity.HistoricalEntity;
  * object's state between the effective and expired datetimes.
  * 
  * @author Andrew Post
+ * 
+ * @param <PK> the primary key type.
  * @param <E> the entity type.
  */
-public interface HistoricalDao<E extends HistoricalEntity> extends Dao<E, Long> {
+public interface HistoricalDao<PK, E extends HistoricalEntity<PK>> extends Dao<E, PK> {
     List<E> getCurrent();
     
     /**

@@ -43,7 +43,7 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
     /**
      * The type for the entities this DAO instance handles.
      */
-    private final Class<T> entityClass;
+    final Class<T> entityClass;
 
     /**
      * Provides entity managers on demand.

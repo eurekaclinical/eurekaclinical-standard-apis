@@ -30,7 +30,7 @@ import org.eurekaclinical.standardapis.entity.HistoricalEntity;
  * @author Andrew Post
  * @param <T> an entity that stores rather than overwrites its previous states.
  */
-public interface HistoricalDaoWithUniqueName <T extends HistoricalEntity<T>> extends HistoricalDao<T> {
+public interface HistoricalDaoWithUniqueName <PK, T extends HistoricalEntity<PK>> extends HistoricalDao<PK, T> {
     
     /**
      * Gets the current entity with the given name, for entities that store
