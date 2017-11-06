@@ -151,7 +151,7 @@ public final class DatabaseSupport {
      * <code>null</code>.
      * @return the instances requested. Guaranteed not <code>null</code>.
      */
-    public <T extends HistoricalEntity> List<T> getCurrent(Class<T> historicalEntityCls) {
+    public <T extends HistoricalEntity<?>> List<T> getCurrent(Class<T> historicalEntityCls) {
         EntityManager entityManager = this.entityManagerProvider.get();
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<T> criteriaQuery = builder.createQuery(historicalEntityCls);
@@ -174,7 +174,7 @@ public final class DatabaseSupport {
      *
      * @return the instance requested. Guaranteed not <code>null</code>.
      */
-    public <T extends HistoricalEntity, Y> T getCurrentUniqueByAttribute(
+    public <T extends HistoricalEntity<?>, Y> T getCurrentUniqueByAttribute(
             Class<T> historicalEntityCls, 
             SingularAttribute<T, Y> attribute, Y value) {
         EntityManager entityManager = this.entityManagerProvider.get();
@@ -213,7 +213,7 @@ public final class DatabaseSupport {
      *
      * @return the instance requested. Guaranteed not <code>null</code>.
      */
-    public <T extends HistoricalEntity, Y> List<T> getCurrentListByAttribute(
+    public <T extends HistoricalEntity<?>, Y> List<T> getCurrentListByAttribute(
             Class<T> historicalEntityCls, 
             SingularAttribute<T, Y> attribute, Y value) {
         EntityManager entityManager = this.entityManagerProvider.get();
