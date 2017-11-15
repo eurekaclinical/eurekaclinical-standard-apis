@@ -23,6 +23,7 @@ import java.security.Principal;
 import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.servlet.ServletRequest;
 import org.eurekaclinical.standardapis.dao.UserDao;
 import org.eurekaclinical.standardapis.entity.RoleEntity;
 import org.eurekaclinical.standardapis.entity.UserEntity;
@@ -45,7 +46,7 @@ public class RolesFromDbFilter extends AbstractRolesFilter {
     }
 
     @Override
-    protected String[] getRoles(Principal principal) {
+    protected String[] getRoles(Principal principal, ServletRequest inRequest) {
         UserEntity<? extends RoleEntity> user = this.userDao.getByPrincipal(principal);
         if (user != null) {
             List<? extends RoleEntity> roles = user.getRoles();
