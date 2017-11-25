@@ -40,7 +40,7 @@ public abstract class AbstractRolesFilter implements RolesFilter {
 
     /**
      * Does nothing.
-     * 
+     *
      * @param fc the filter configuration.
      */
     @Override
@@ -49,18 +49,20 @@ public abstract class AbstractRolesFilter implements RolesFilter {
 
     /**
      * Sets a <code>roles</code> session attribute containing an array of role
-     * names for the current user principal. It fetches the roles array from the {@link #getRoles(java.security.Principal, javax.servlet.ServletRequest) }
-     * call. If the session attribute is not null, it will not fetch the
-     * user's roles again. If there is no session or if the user principal is
-     * not set, this filter just passes the request and response onto the next
-     * filter in the chain.
+     * names for the current user principal. It fetches the roles array from the {@link #getRoles(java.security.Principal, javax.servlet.ServletRequest)
+     * }
+     * call. If the session attribute is not null, it will not fetch the user's
+     * roles again. If there is no session or if the user principal is not set,
+     * this filter just passes the request and response onto the next filter in
+     * the chain.
      *
      * @param inRequest the servlet request.
      * @param inResponse the servlet response.
      * @param inChain the filter chain.
      * @throws IOException if the exception is thrown from downstream in the
      * filter chain.
-     * @throws ServletException if the {@link #getRoles(java.security.Principal, javax.servlet.ServletRequest) }
+     * @throws ServletException if the {@link #getRoles(java.security.Principal, javax.servlet.ServletRequest)
+     * }
      * call fails or if the exception is thrown from downstream in the filter
      * chain.
      */
@@ -70,16 +72,17 @@ public abstract class AbstractRolesFilter implements RolesFilter {
         Principal principal = servletRequest.getUserPrincipal();
         HttpSession session = servletRequest.getSession(false);
         if (principal != null && session != null) {
-            String[] roleNames = (String[]) session.getAttribute("roles");
+            String[] roleNames;
+            synchronized (session) {
+                roleNames = (String[]) session.getAttribute("roles");
 
-            if (roleNames == null) {
-                roleNames = getRoles(principal, inRequest);
-                session.setAttribute("roles", roleNames);
+                if (roleNames == null) {
+                    roleNames = getRoles(principal, inRequest);
+                    session.setAttribute("roles", roleNames);
+                }
             }
-
             HttpServletRequest wrappedRequest = new RolesRequestWrapper(
                     servletRequest, principal, roleNames);
-
             inChain.doFilter(wrappedRequest, inResponse);
         } else {
             inChain.doFilter(inRequest, inResponse);
@@ -97,8 +100,8 @@ public abstract class AbstractRolesFilter implements RolesFilter {
      * empty. A return value of <code>null</code> should be used if an error
      * occurred retrieving role information.
      *
-     * @throws javax.servlet.ServletException if the user's role information 
-     * is not available due to a fatal error.
+     * @throws javax.servlet.ServletException if the user's role information is
+     * not available due to a fatal error.
      *
      */
     protected abstract String[] getRoles(Principal inPrincipal, ServletRequest inRequest) throws ServletException;
