@@ -19,6 +19,7 @@ package org.eurekaclinical.standardapis.props;
  * limitations under the License.
  * #L%
  */
+import java.util.List;
 import javax.ws.rs.core.UriBuilder;
 
 import org.slf4j.Logger;
@@ -94,6 +95,20 @@ public abstract class CasEurekaClinicalProperties extends EurekaClinicalProperti
      */
     public boolean getCasLoginGateway() {
         return false;
+    }
+    
+    /**
+     * For API gateways, specifies the URLs of the web clients that may attempt
+     * to login to the gateway. This default implementation always returns
+     * <code>null</code>. Subclasses for an API gateway should override this
+     * implementation to get the list of allowed webclients from an
+     * application property that is specific to the gateway.
+     * 
+     * @return a list of URL strings, or an empty list or <code>null</code> if
+     * none are specified.
+     */
+    public List<String> getAllowedWebClientUrls() {
+        return null;
     }
     
 }
