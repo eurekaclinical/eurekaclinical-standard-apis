@@ -19,11 +19,11 @@ package org.eurekaclinical.standardapis.props;
  * limitations under the License.
  * #L%
  */
-import java.util.List;
-import javax.ws.rs.core.UriBuilder;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.ws.rs.core.UriBuilder;
+import java.util.List;
 
 /**
  * Base class for implementing properties for Eureka! Clinical microservices.
@@ -85,7 +85,7 @@ public abstract class CasEurekaClinicalProperties extends EurekaClinicalProperti
     public boolean getCasLoginRenew() {
         return Boolean.parseBoolean(getValue("cas.login.renew", "false"));
     }
-    
+
     /**
      * Whether or not to use CAS gateway mode for authentication. Set to
      * <code>false</code>. Subclasses may override this method to return
@@ -110,5 +110,34 @@ public abstract class CasEurekaClinicalProperties extends EurekaClinicalProperti
     public List<String> getAllowedWebClientUrls() {
         return null;
     }
-    
+
+    /**
+     * Get the JWT passphrase used to encode tokens.
+     *
+     * @return The JWT passphrase
+     */
+    public String getJwtSecret() {
+        return getValue("jwt.secret");
+    }
+
+    /**
+     * Returns whether JWT should be enabled for the service.  Defaults to false
+     * if no configuration value is provided.
+     *
+     * @return Whether JWT should be enabled
+     */
+    public boolean isJwtEnabled() {
+        return Boolean.parseBoolean(getValue("jwt.enabled", "false"));
+    }
+
+    /**
+     * Returns a list of addresses whitelisted for access.  The value must be defined as a comma separated
+     * list in the configuration. Defaults to no hosts in the whitelist if no configuration value is
+     * provided.
+     *
+     * @return A list of internet addresses
+     */
+    public String getJwtWhitelist() {
+        return getValue("jwt.whitelist", "");
+    }
 }
