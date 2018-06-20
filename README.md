@@ -12,13 +12,15 @@ web applications that use those standards, including:
 * Interfaces for implementing data access objects, and abstract classes for implementing data access objects for users, roles and authorization templates (`org.eurekaclinical.standardapis.dao`)
 * A filter for getting the user's roles using JPA and assigning them to the user principal (`org.eurekaclinical.standardapis.filter`)
 
-## Version 2.0 development series
 Latest release: [![Latest release](https://maven-badges.herokuapp.com/maven-central/org.eurekaclinical/eurekaclinical-standard-apis/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.eurekaclinical/eurekaclinical-standard-apis)
 
-The goal of the 2.0 series is to have sufficient functionality for all Eureka! Clinical web applications to depend on eurekaclinical-standard-apis.
+## Version 2.1
+Updates dependencies.
 
-## Version history
-### Version 1.0
+## Version 2.0
+Version 2.0 has sufficient functionality for all Eureka! Clinical web applications to depend on eurekaclinical-standard-apis.
+
+## Version 1.0
 The initial release provides standards-based implementations for creating JPA entities for managing users, roles and authorization templates; creating data access objects; accessing role information for authorization; reading application configuration; and throwing meaningful exceptions when REST API responses have an error status code. It uses the standard versions specified by the [Eureka! Clinical Standard Dependencies parent pom](https://github.com/eurekaclinical/eurekaclinical-parent-standard-deps), which are:
 * JPA 2.1 (Java Persistence)
 * Servlet API 3.0.1
