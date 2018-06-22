@@ -54,6 +54,32 @@ public class RolesRequestWrapper extends HttpServletRequestWrapper {
     private final HttpServletRequest request;
 
     /**
+     * The remote user for the given request.
+     */
+    private final String remoteUser;
+
+    /**
+     * Create a wrapper with the given principal, role assigned to that
+     * principal, and the original request.
+     *
+     * @param inRequest The original request.
+     * @param inPrincipal The request principal.
+     * @param inRoles The roles assigned to the principal.
+     * @param inRemoteUser The remote user for the given request.
+     */
+    public RolesRequestWrapper(HttpServletRequest inRequest,
+            Principal inPrincipal, String[] inRoles, String inRemoteUser) {
+        super(inRequest);
+        this.request = inRequest;
+        this.principal = inPrincipal;
+        this.roles = new HashSet<>();
+        for (String role : inRoles) {
+            this.roles.add(role);
+        }
+        this.remoteUser = inRemoteUser;
+    }
+
+    /**
      * Create a wrapper with the given principal, role assigned to that
      * principal, and the original request.
      *
@@ -62,13 +88,16 @@ public class RolesRequestWrapper extends HttpServletRequestWrapper {
      * @param inRoles The roles assigned to the principal.
      */
     public RolesRequestWrapper(HttpServletRequest inRequest,
-            Principal inPrincipal, String[] inRoles) {
-        super(inRequest);
-        this.request = inRequest;
-        this.principal = inPrincipal;
-        this.roles = new HashSet<>();
-        for (String role : inRoles) {
-            this.roles.add(role);
+                               Principal inPrincipal, String[] inRoles) {
+        this(inRequest, inPrincipal, inRoles, null);
+    }
+
+    @Override
+    public String getRemoteUser() {
+        if (this.remoteUser == null) {
+            return this.request.getRemoteUser();
+        } else {
+            return this.remoteUser;
         }
     }
 
