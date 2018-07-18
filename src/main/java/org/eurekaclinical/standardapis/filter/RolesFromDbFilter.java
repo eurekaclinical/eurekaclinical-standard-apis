@@ -44,20 +44,34 @@ public class RolesFromDbFilter extends AbstractRolesFilter {
     public RolesFromDbFilter(UserDao<? extends UserEntity<? extends RoleEntity>> inUserDao) {
         this.userDao = inUserDao;
     }
-
+    
+    /**
+    * The getRoles method will now return 
+    * Null if UserObject not found,
+    * EMPTY_ARRAY if the user found and don't have any associated roles and
+    * String Array if the user found and have associated roles.
+    * @return Array of Roles, empth array if no roles associated and Null if User not found
+    * @author  Dileep Gunda
+    * @since   06-11-18 
+    */
     @Override
     protected String[] getRoles(Principal principal, ServletRequest inRequest) {
         UserEntity<? extends RoleEntity> user = this.userDao.getByPrincipal(principal);
         if (user != null) {
             List<? extends RoleEntity> roles = user.getRoles();
-            String[] roleNames = new String[roles.size()];
-            int i = 0;
-            for (RoleEntity re : roles) {
-                roleNames[i++] = re.getName();
+            if(roles.size() !=0){
+                String[] roleNames = new String[roles.size()];
+                int i = 0;
+                for (RoleEntity re : roles) {
+                    roleNames[i++] = re.getName();
+                }
+                return roleNames;
             }
-            return roleNames;
+            else {
+                return EMPTY_STRING_ARRAY;
+            }
         } else {
-            return EMPTY_STRING_ARRAY;
+            return null;
         }
 
     }
