@@ -81,4 +81,14 @@ public interface Dao<T, PK> {
      */
     List<T> getAll();
     
+    /**
+     * Retrieves a list of all the entities of the given type in the data store.
+     *
+     * @param firstResult index of the first row to be retrieved.
+     * @param maxResults amount of rows to be retrieved.
+     * 
+     * @return A list of all entities in the data store.
+     */
+    List<T> getAll(int firstResult, int maxResults);
+    
 }

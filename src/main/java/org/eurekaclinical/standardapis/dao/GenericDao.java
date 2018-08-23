@@ -157,6 +157,16 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
     public List<T> getAll() {
         return getDatabaseSupport().getAll(getEntityClass());
     }
+    
+    /**
+     * Gets all of this DAO's entities.
+     *
+     * @return a list of entities. Guaranteed not <code>null</code>.
+     */
+    @Override
+    public List<T> getAll(int firstResult, int maxResults) {
+        return getDatabaseSupport().getAll(getEntityClass(), firstResult, maxResults);
+    }
 
     /**
      * Gets all of this DAO's entities ordered by the provided attribute in
@@ -173,6 +183,26 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
         Root<T> root = criteriaQuery.from(getEntityClass());
         criteriaQuery.orderBy(builder.asc(root.get(attribute)));
         return entityManager.createQuery(criteriaQuery).getResultList();
+    }
+    
+    /**
+     * Gets all of this DAO's entities ordered by the provided attribute in
+     * ascending order.
+     *
+     * @param attribute the attribute to order by.
+     *
+     * @return an ordered list of entities. Guaranteed not <code>null</code>.
+     */
+    protected List<T> getListAsc(SingularAttribute<T, ?> attribute, int firstResult, int maxResults) {
+        EntityManager entityManager = this.getEntityManager();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery = builder.createQuery(getEntityClass());
+        Root<T> root = criteriaQuery.from(getEntityClass());
+        criteriaQuery.orderBy(builder.asc(root.get(attribute)));
+        return entityManager.createQuery(criteriaQuery)
+                .setFirstResult(firstResult)
+                .setMaxResults(maxResults)
+                .getResultList();
     }
 
     /**
