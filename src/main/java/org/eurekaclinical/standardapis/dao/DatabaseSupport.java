@@ -141,6 +141,32 @@ public final class DatabaseSupport {
         List<T> results = typedQuery.getResultList();
         return results;
     }
+    
+    /**
+     * Gets every instance of the specified entity in the database.
+     *
+     * @param <T> the type of the entity.
+     * @param entityCls the class of the specified entity. Cannot be
+     * <code>null</code>.
+     * @return the instances requested. Guaranteed not <code>null</code>.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getAll(Class<T> entityCls, int firstResult, int maxResults) {
+        if (entityCls == null) {
+            throw new IllegalArgumentException("entityCls cannot be null");
+        }
+        EntityManager entityManager = this.entityManagerProvider.get();
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<T> criteriaQuery
+                = builder.createQuery(entityCls);
+        criteriaQuery.from(entityCls);
+        TypedQuery<T> typedQuery
+                = entityManager.createQuery(criteriaQuery);
+        return typedQuery
+                .setFirstResult(firstResult)
+                .setMaxResults(maxResults)
+                .getResultList();
+    }
 
     /**
      * Gets every instance of the specified historical entity in the database.
