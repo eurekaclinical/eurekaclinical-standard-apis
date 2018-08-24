@@ -14,6 +14,9 @@ web applications that use those standards, including:
 
 Latest release: [![Latest release](https://maven-badges.herokuapp.com/maven-central/org.eurekaclinical/eurekaclinical-standard-apis/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.eurekaclinical/eurekaclinical-standard-apis)
 
+## Version 3.0
+Generalized user templating.
+
 ## Version 2.1
 Updates dependencies.
 
