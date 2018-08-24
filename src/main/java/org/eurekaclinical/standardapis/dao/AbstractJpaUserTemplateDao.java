@@ -22,13 +22,10 @@ package org.eurekaclinical.standardapis.dao;
 
 import javax.persistence.EntityManager;
 
-import java.security.Principal;
 import javax.inject.Provider;
+import org.eurekaclinical.standardapis.entity.RoleEntity;
 
-import javax.servlet.http.HttpServletRequest;
 import org.eurekaclinical.standardapis.entity.UserTemplateEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * An implementation of the {@link UserDao} interface, backed by JPA entities
@@ -37,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * @author Andrew Post
  * @param <U> the user entity class.
  */
-public abstract class AbstractJpaUserTemplateDao<U extends UserTemplateEntity<?>> extends GenericDao<U, Long> implements UserTemplateDao<U> {
+public abstract class AbstractJpaUserTemplateDao<R extends RoleEntity, U extends UserTemplateEntity<R>> extends GenericDao<U, Long> implements UserTemplateDao<R, U> {
 
     /**
      * Create an object with the give entity manager.

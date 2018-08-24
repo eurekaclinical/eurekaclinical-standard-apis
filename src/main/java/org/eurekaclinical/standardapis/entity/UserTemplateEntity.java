@@ -25,6 +25,7 @@ import java.util.List;
 /**
  *
  * @author Andrew Post
+ * @param <R>
  */
 public interface UserTemplateEntity<R extends RoleEntity> extends Entity<Long> {
     /**
