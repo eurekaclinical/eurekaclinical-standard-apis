@@ -19,7 +19,6 @@ package org.eurekaclinical.standardapis.filter;
  * limitations under the License.
  * #L%
  */
-
 import java.security.Principal;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,12 +26,10 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Wraps an HttpServletRequest object, so that roles for the principal can be
- * implemented.
+ * implemented if none are populated in the request instance.
  *
  * @author hrathod
  *
@@ -57,8 +54,8 @@ public class RolesRequestWrapper extends HttpServletRequestWrapper {
      * Create a wrapper with the given principal, role assigned to that
      * principal, and the original request.
      *
-     * @param inRequest The original request.
-     * @param inPrincipal The request principal.
+     * @param inRequest The original request. Cannot be null.
+     * @param inPrincipal The request principal. Cannot be null.
      * @param inRoles The roles assigned to the principal.
      */
     public RolesRequestWrapper(HttpServletRequest inRequest,
@@ -66,44 +63,47 @@ public class RolesRequestWrapper extends HttpServletRequestWrapper {
         super(inRequest);
         this.request = inRequest;
         this.principal = inPrincipal;
-        this.roles = new HashSet<>();
-        for (String role : inRoles) {
-            this.roles.add(role);
+        if (inRoles != null) {
+            this.roles = new HashSet<>();
+            for (String role : inRoles) {
+                this.roles.add(role);
+            }
+        } else {
+            this.roles = null;
         }
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * javax.servlet.http.HttpServletRequestWrapper#isUserInRole(java.lang.String
-	 * )
+    /**
+     * Checks if the given role is one of those that were passed into the
+     * constructor. If <code>null</code> passed in for roles, it checks 
+     * the request that was passed into the constructor instead.
+     * 
+     * @param inRole a role.
+     * @return <code>true</code> or <code>false</code>.
      */
     @Override
     public boolean isUserInRole(String inRole) {
-        boolean result;
         if (this.roles == null) {
-            result = this.request.isUserInRole(inRole);
+            return this.request.isUserInRole(inRole);
         } else {
-            result = this.roles.contains(inRole);
+            return this.roles.contains(inRole);
         }
-        return result;
     }
 
-    /*
-	 * (non-Javadoc)
-	 * 
-	 * @see javax.servlet.http.HttpServletRequestWrapper#getUserPrincipal()
+    /**
+     * Returns the {@link Principal} that was passed into the constructor. If
+     * <code>null</code> was passed into the constructor, it tries getting
+     * the Principal from the request that was passed into the constructor.
+     * 
+     * @return a user principal.
      */
     @Override
     public Principal getUserPrincipal() {
-        Principal result;
         if (this.principal == null) {
-            result = this.request.getUserPrincipal();
+            return this.request.getUserPrincipal();
         } else {
-            result = this.principal;
+            return this.principal;
         }
-        return result;
     }
 
     public Set<String> getRoles() {
