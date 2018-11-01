@@ -23,7 +23,10 @@ package org.eurekaclinical.standardapis.entity;
 import java.util.List;
 
 /**
- *
+ * Interface for JPA user entities. The only fields that may be required for a
+ * user entity are the username and roles. Everything else must be optional or
+ * have a default value if left unspecified.
+ * 
  * @author Andrew Post
  * @param <R> a role type.
  */

@@ -21,6 +21,7 @@ package org.eurekaclinical.standardapis.dao;
  */
 
 import java.security.Principal;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.eurekaclinical.standardapis.entity.RoleEntity;
 import org.eurekaclinical.standardapis.entity.UserEntity;
@@ -38,5 +39,21 @@ public interface UserDao<U extends UserEntity<? extends RoleEntity>> extends Dao
     U getByHttpServletRequest(HttpServletRequest request);
     
     U getByPrincipal(Principal principal);
+    
+    /**
+     * Creates a new user entity instance with all-default values. It does not
+     * persist it.
+     * 
+     * @return a newly created entity.
+     */
+    U newUser();
+    
+    /**
+     * Creates a user record with the given username and roles, and persists it.
+     * 
+     * @param username the username.
+     * @param roles zero or more roles.
+     */
+    void createUser(String username, List<String> roles);
 
 }

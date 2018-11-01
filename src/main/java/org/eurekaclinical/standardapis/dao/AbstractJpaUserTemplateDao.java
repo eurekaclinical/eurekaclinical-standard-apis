@@ -24,7 +24,6 @@ import javax.persistence.EntityManager;
 
 import javax.inject.Provider;
 import org.eurekaclinical.standardapis.entity.RoleEntity;
-import org.eurekaclinical.standardapis.entity.UserEntity;
 
 import org.eurekaclinical.standardapis.entity.UserTemplateEntity;
 
@@ -34,10 +33,9 @@ import org.eurekaclinical.standardapis.entity.UserTemplateEntity;
  *
  * @author Andrew Post
  * @param <R> the role entity class.
- * @param <U> the user entity class.
  * @param <T> the user template entity class.
  */
-public abstract class AbstractJpaUserTemplateDao<R extends RoleEntity, U extends UserEntity<R>, T extends UserTemplateEntity<R>> extends GenericDao<T, Long> implements UserTemplateDao<R, U, T> {
+public abstract class AbstractJpaUserTemplateDao<R extends RoleEntity, T extends UserTemplateEntity<R>> extends GenericDao<T, Long> implements UserTemplateDao<R, T> {
 
     /**
      * Create an object with the give entity manager.

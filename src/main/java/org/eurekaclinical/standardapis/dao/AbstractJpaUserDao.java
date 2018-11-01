@@ -23,26 +23,24 @@ package org.eurekaclinical.standardapis.dao;
 import javax.persistence.EntityManager;
 
 import java.security.Principal;
+import java.util.List;
 import javax.inject.Provider;
 
 import javax.servlet.http.HttpServletRequest;
+import org.eurekaclinical.standardapis.entity.RoleEntity;
 import org.eurekaclinical.standardapis.entity.UserEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * An implementation of the {@link UserDao} interface, backed by JPA entities
  * and queries.
  *
  * @author Andrew Post
+ * @param <R>
  * @param <U> the user entity class.
  */
-public abstract class AbstractJpaUserDao<U extends UserEntity<?>> extends GenericDao<U, Long> implements UserDao<U> {
+public abstract class AbstractJpaUserDao<R extends RoleEntity, U extends UserEntity<R>> extends GenericDao<U, Long> implements UserDao<U> {
 
-    /**
-     * The class level logger.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractJpaUserDao.class);
+    private final RoleDao<R> roleDao;
 
     /**
      * Create an object with the give entity manager.
@@ -50,9 +48,11 @@ public abstract class AbstractJpaUserDao<U extends UserEntity<?>> extends Generi
      * @param cls the user entity class.
      * @param inEMProvider The entity manager to be used for communication with
      * the data store.
+     * @param inRoleDao
      */
-    public AbstractJpaUserDao(Class<U> cls, final Provider<EntityManager> inEMProvider) {
+    public AbstractJpaUserDao(Class<U> cls, final Provider<EntityManager> inEMProvider, RoleDao<R> inRoleDao) {
         super(cls, inEMProvider);
+        this.roleDao = inRoleDao;
     }
 
     @Override
@@ -68,6 +68,17 @@ public abstract class AbstractJpaUserDao<U extends UserEntity<?>> extends Generi
     @Override
     public U getByName(String username) {
         return getUniqueByAttribute("username", username);
+    }
+    
+    @Override
+    public void createUser(String username, List<String> roles) {
+        U user = newUser();
+        user.setUsername(username);
+        for (String roleName : roles) {
+            R byName = this.roleDao.getByName(roleName);
+            user.addRole(byName);
+        }
+        this.create(user);
     }
 
 }
