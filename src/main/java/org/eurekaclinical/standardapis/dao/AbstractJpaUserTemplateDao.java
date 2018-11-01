@@ -24,6 +24,7 @@ import javax.persistence.EntityManager;
 
 import javax.inject.Provider;
 import org.eurekaclinical.standardapis.entity.RoleEntity;
+import org.eurekaclinical.standardapis.entity.UserEntity;
 
 import org.eurekaclinical.standardapis.entity.UserTemplateEntity;
 
@@ -32,9 +33,11 @@ import org.eurekaclinical.standardapis.entity.UserTemplateEntity;
  * and queries.
  *
  * @author Andrew Post
+ * @param <R> the role entity class.
  * @param <U> the user entity class.
+ * @param <T> the user template entity class.
  */
-public abstract class AbstractJpaUserTemplateDao<R extends RoleEntity, U extends UserTemplateEntity<R>> extends GenericDao<U, Long> implements UserTemplateDao<R, U> {
+public abstract class AbstractJpaUserTemplateDao<R extends RoleEntity, U extends UserEntity<R>, T extends UserTemplateEntity<R>> extends GenericDao<T, Long> implements UserTemplateDao<R, U, T> {
 
     /**
      * Create an object with the give entity manager.
@@ -43,12 +46,12 @@ public abstract class AbstractJpaUserTemplateDao<R extends RoleEntity, U extends
      * @param inEMProvider The entity manager to be used for communication with
      * the data store.
      */
-    public AbstractJpaUserTemplateDao(Class<U> cls, final Provider<EntityManager> inEMProvider) {
+    public AbstractJpaUserTemplateDao(Class<T> cls, final Provider<EntityManager> inEMProvider) {
         super(cls, inEMProvider);
     }
 
     @Override
-    public U getByName(String name) {
+    public T getByName(String name) {
         return getUniqueByAttribute("name", name);
     }
 

@@ -29,10 +29,11 @@ import org.eurekaclinical.standardapis.entity.UserTemplateEntity;
  *
  * @author Andrew Post
  * @param <R>
+ * @param <U>
  * @param <E>
  */
-public interface UserTemplateDao<R extends RoleEntity, E extends UserTemplateEntity<R>> extends DaoWithUniqueName<E, Long> {
+public interface UserTemplateDao<R extends RoleEntity, U extends UserEntity<R>, E extends UserTemplateEntity<R>> extends DaoWithUniqueName<E, Long> {
     E getAutoAuthorizationTemplate();
     
-    public UserEntity newUserEntityInstance(String username, List<R> roles);
+    public U newUserEntityInstance(String username, List<R> roles);
 }
