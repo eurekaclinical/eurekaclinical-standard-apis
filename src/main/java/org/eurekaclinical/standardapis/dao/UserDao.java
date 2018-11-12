@@ -54,6 +54,6 @@ public interface UserDao<U extends UserEntity<? extends RoleEntity>> extends Dao
      * @param username the username.
      * @param roles zero or more roles.
      */
-    void createUser(String username, List<String> roles);
+    void createUser(String username, List<RoleEntity> roles);
 
 }

@@ -71,12 +71,11 @@ public abstract class AbstractJpaUserDao<R extends RoleEntity, U extends UserEnt
     }
     
     @Override
-    public void createUser(String username, List<String> roles) {
+    public void createUser(String username, List<RoleEntity> roles) {
         U user = newUser();
         user.setUsername(username);
-        for (String roleName : roles) {
-            R byName = this.roleDao.getByName(roleName);
-            user.addRole(byName);
+        for (RoleEntity role : roles) {
+        	user.addRole((R)role);
         }
         this.create(user);
     }
