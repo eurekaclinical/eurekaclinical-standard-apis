@@ -148,6 +148,8 @@ public final class DatabaseSupport {
      * @param <T> the type of the entity.
      * @param entityCls the class of the specified entity. Cannot be
      * <code>null</code>.
+     * @param firstResult the index of the first result to get.
+     * @param maxResults the number of results to get.
      * @return the instances requested. Guaranteed not <code>null</code>.
      */
     @SuppressWarnings("unchecked")

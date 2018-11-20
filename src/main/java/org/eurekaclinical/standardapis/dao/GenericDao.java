@@ -190,6 +190,8 @@ public class GenericDao<T, PK> implements Dao<T, PK> {
      * ascending order.
      *
      * @param attribute the attribute to order by.
+     * @param firstResult the index of the first result to get.
+     * @param maxResults the number of results to get.
      *
      * @return an ordered list of entities. Guaranteed not <code>null</code>.
      */
