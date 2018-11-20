@@ -19,7 +19,6 @@ package org.eurekaclinical.standardapis.dao;
  * limitations under the License.
  * #L%
  */
-
 import javax.persistence.EntityManager;
 
 import java.security.Principal;
@@ -35,12 +34,10 @@ import org.eurekaclinical.standardapis.entity.UserEntity;
  * and queries.
  *
  * @author Andrew Post
- * @param <R>
- * @param <U> the user entity class.
+ * @param <R> a role type.
+ * @param <U> a user type.
  */
-public abstract class AbstractJpaUserDao<R extends RoleEntity, U extends UserEntity<R>> extends GenericDao<U, Long> implements UserDao<U> {
-
-    private final RoleDao<R> roleDao;
+public abstract class AbstractJpaUserDao<R extends RoleEntity, U extends UserEntity<R>> extends GenericDao<U, Long> implements UserDao<R, U> {
 
     /**
      * Create an object with the give entity manager.
@@ -48,11 +45,9 @@ public abstract class AbstractJpaUserDao<R extends RoleEntity, U extends UserEnt
      * @param cls the user entity class.
      * @param inEMProvider The entity manager to be used for communication with
      * the data store.
-     * @param inRoleDao
      */
-    public AbstractJpaUserDao(Class<U> cls, final Provider<EntityManager> inEMProvider, RoleDao<R> inRoleDao) {
+    public AbstractJpaUserDao(Class<U> cls, final Provider<EntityManager> inEMProvider) {
         super(cls, inEMProvider);
-        this.roleDao = inRoleDao;
     }
 
     @Override
@@ -69,15 +64,15 @@ public abstract class AbstractJpaUserDao<R extends RoleEntity, U extends UserEnt
     public U getByName(String username) {
         return getUniqueByAttribute("username", username);
     }
-    
+
     @Override
-    public void createUser(String username, List<RoleEntity> roles) {
+    public void createUser(String username, List<R> roles) {
         U user = newUser();
         user.setUsername(username);
-        for (RoleEntity role : roles) {
-        	user.addRole((R)role);
+        for (R role : roles) {
+            user.addRole(role);
         }
-        this.create(user);
+        create(user);
     }
 
 }

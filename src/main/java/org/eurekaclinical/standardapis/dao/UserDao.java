@@ -31,10 +31,11 @@ import org.eurekaclinical.standardapis.entity.UserEntity;
  * in a data store.
  *
  * @author Andrew Post
+ * @param <R> a role type.
  * @param <U> a user type.
  *
  */
-public interface UserDao<U extends UserEntity<? extends RoleEntity>> extends DaoWithUniqueName<U, Long> {
+public interface UserDao<R extends RoleEntity, U extends UserEntity<R>> extends DaoWithUniqueName<U, Long> {
 
     U getByHttpServletRequest(HttpServletRequest request);
     
@@ -49,11 +50,13 @@ public interface UserDao<U extends UserEntity<? extends RoleEntity>> extends Dao
     U newUser();
     
     /**
-     * Creates a user record with the given username and roles, and persists it.
+     * Creates a user record with the given username, grants the user the given 
+     * roles, and persists the user.
+     * This method calls {@link #newUser() } to create the user instance.
      * 
      * @param username the username.
      * @param roles zero or more roles.
      */
-    void createUser(String username, List<RoleEntity> roles);
+    void createUser(String username, List<R> roles);
 
 }

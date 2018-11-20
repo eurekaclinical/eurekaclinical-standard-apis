@@ -20,12 +20,10 @@ package org.eurekaclinical.standardapis.filter;
  * #L%
  */
 import java.security.Principal;
-import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.servlet.ServletRequest;
 import org.eurekaclinical.standardapis.dao.UserDao;
-import org.eurekaclinical.standardapis.entity.RoleEntity;
 import org.eurekaclinical.standardapis.entity.UserEntity;
 
 /**
@@ -36,12 +34,18 @@ import org.eurekaclinical.standardapis.entity.UserEntity;
  */
 @Singleton
 public class RolesFromDbFilter extends AbstractRolesFilter {
-    private static final String[] EMPTY_STRING_ARRAY = new String[0];
     
-    private final UserDao<? extends UserEntity<? extends RoleEntity>> userDao;
+    private final UserDao userDao;
 
+    /**
+     * Instantiates a filter that assigns the user roles obtained from the
+     * database. Users of this filter must bind the UserDao&lt;?, ?&gt;
+     * interface to an implementation.
+     * 
+     * @param inUserDao the user data access object.
+     */
     @Inject
-    public RolesFromDbFilter(UserDao<? extends UserEntity<? extends RoleEntity>> inUserDao) {
+    public RolesFromDbFilter(UserDao<?, ?> inUserDao) {
         this.userDao = inUserDao;
     }
     
@@ -50,26 +54,17 @@ public class RolesFromDbFilter extends AbstractRolesFilter {
     * Null if UserObject not found,
     * EMPTY_ARRAY if the user found and don't have any associated roles and
     * String Array if the user found and have associated roles.
+    * @param inPrincipal the user principal.
+    * @param inRequest the HTTP request.
     * @return Array of Roles, empth array if no roles associated and Null if User not found
     * @author  Dileep Gunda
     * @since   06-11-18 
     */
     @Override
-    protected String[] getRoles(Principal principal, ServletRequest inRequest) {
-        UserEntity<? extends RoleEntity> user = this.userDao.getByPrincipal(principal);
+    protected String[] getRoles(Principal inPrincipal, ServletRequest inRequest) {
+        UserEntity user = this.userDao.getByPrincipal(inPrincipal);
         if (user != null) {
-            List<? extends RoleEntity> roles = user.getRoles();
-            if(roles.size() !=0){
-                String[] roleNames = new String[roles.size()];
-                int i = 0;
-                for (RoleEntity re : roles) {
-                    roleNames[i++] = re.getName();
-                }
-                return roleNames;
-            }
-            else {
-                return EMPTY_STRING_ARRAY;
-            }
+            return user.getRoleNames();
         } else {
             return null;
         }

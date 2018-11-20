@@ -46,6 +46,13 @@ public interface UserEntity<R extends RoleEntity> extends Entity<Long> {
      * @return A list of roles assigned to the user.
      */
     List<R> getRoles();
+    
+    /**
+     * Gets all the roles assigned to the user as strings.
+     * 
+     * @return An array of roles assigned to the user.
+     */
+    String[] getRoleNames();
 
     /**
      * Get the user's unique username.
