@@ -21,7 +21,9 @@
         <url>https://github.com/eurekaclinical/eurekaclinical-standard-apis.git</url>
         <tag>HEAD</tag>
     </scm>
-
+    <properties>
+    	<maven.javadoc.skip>true</maven.javadoc.skip>
+    </properties>
     <issueManagement>
         <system>GitHub</system>
         <url>https://github.com/eurekaclinical/eurekaclinical-standard-apis/issues</url>
