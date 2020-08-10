@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>eurekaclinical-standard-apis</artifactId>
     <name>Eureka! Clinical Standard APIs</name>
-    <version>4.1-Alpha-2-SNAPSHOT</version>
+    <version>4.1-Alpha-1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <description>A library of classes shared across the Eureka! Clinical platform.</description>
 
